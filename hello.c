@@ -6,6 +6,8 @@ typedef struct Hello {
 	int array[100];
 } Hello;
 
+int arena[1024];
+
 int main() {
 	/*ore_mem_init(address, size); そのアドレスとサイズしか使わなくなるから、ここで初期化する*/
 	int* i = malloc(sizeof (int));
