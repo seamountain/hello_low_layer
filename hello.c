@@ -6,7 +6,7 @@ typedef struct Hello {
 	int array[100];
 } Hello;
 
-int arena[1024];
+int arena[10000];
 
 int main() {
 	/*ore_mem_init(arena, sizeof (arena));
