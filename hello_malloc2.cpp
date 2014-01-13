@@ -8,53 +8,92 @@ typedef struct HeapBlock {
 
 const int array_size = 10000;
 int arena[array_size];
-struct HeapBlock alloc_block;
-struct HeapBlock free_block;
+struct HeapBlock *alloc_block;
+struct HeapBlock *free_block;
 
 void initialize_block() {
-  alloc_block.next = &alloc_block;
-  alloc_block.size = sizeof(arena);
-  free_block.size = sizeof(arena);
+  alloc_block = (HeapBlock *)&arena;
+  free_block = (HeapBlock *)&arena + sizeof(alloc_block);
+
+  alloc_block->next = alloc_block;
+  alloc_block->size = sizeof(arena);
+
+  free_block->size -= sizeof(alloc_block);
+  free_block->size -= sizeof(free_block);
+  free_block->prev = (free_block - 1);
+  free_block->next = free_block + 1;
+  free_block->size = sizeof(arena);
 }
 
 void *orig_malloc(size_t size) {
-  struct HeapBlock block_head;
-  struct HeapBlock current_block = *alloc_block.next;
+  alloc_block = alloc_block->next + 1;
+  struct HeapBlock *block_head = free_block->next;
+  block_head->size = sizeof(block_head);
+  block_head->next = alloc_block;
 
-  // TODO: Rest size check
-  // TODO: Adding test script
+  // 返す値は、alloc_blockではなくて、新しくallocしたブロック
+  alloc_block->next = block_head + block_head->size;
+  alloc_block->size += block_head->size + size;
+  free_block->next = alloc_block->next + 1;
+  free_block->size -= block_head->size + size;
+  return alloc_block;
+}
 
-  printf("&alloc_block %p\n", &alloc_block);
-  printf("current_block %p\n", &current_block);
-  printf("current_block->next %p\n", current_block.next);
+void orig_free(void *ptr) {
+  struct HeapBlock *block_head = (HeapBlock *)(&ptr - 1);
+  block_head->next->prev = block_head->prev;
+  block_head->prev = free_block;
+  block_head->size = 0;
 
-  while(current_block.next != &alloc_block) {
-    current_block = *current_block.next;
+  free_block->size += sizeof(ptr);
+  alloc_block->size -= sizeof(ptr);
+
+  if (block_head && alloc_block->next) {
+    alloc_block->next = block_head->next;
   }
-
-  printf("current_block %p\n", current_block.next);
-  printf("block_head %p\n", &block_head);
-  printf("block_head->next %p\n", block_head.next);
-
-  block_head.prev = current_block.next;
-  block_head.next = &alloc_block;
-  block_head.size = size;
-  current_block.next = &block_head;
-  free_block.next = &block_head;
-  return (&free_block.next + 1);
 }
 
 int main() {
   initialize_block();
-  int zero = (intptr_t)orig_malloc(sizeof(int));
-  zero = 0;
-  printf("zero %d\n", zero);
-  printf("&zero %p\n", &zero);
+  int *zero = (int *)orig_malloc(sizeof(int));
+  if (zero == NULL) exit(0);
+  *zero = 0;
 
-  int one = (intptr_t)orig_malloc(sizeof(int));
-  one = 1;
-  printf("one %d\n", one);
-  printf("&one %p\n", &one);
+  int *one = (int *)orig_malloc(sizeof(int));
+  if (one == NULL) exit(0);
+  *one = 1;
+
+  printf("--- result ---\n");
+  printf("*zero %d\n", *zero);
+  printf("zero %p\n", zero);
+  printf("*one %d\n", *one);
+  printf("one %p\n", one);
+  printf("--- end ---\n");
+
+  orig_free(zero);
+  orig_free(one);
+
+  printf("--- after free ---\n");
+  printf("*zero %d\n", *zero);
+  printf("zero %p\n", zero);
+  printf("*one %d\n", *one);
+  printf("one %p\n", one);
+  printf("--- end ---\n");
+
+  int *two = (int *)orig_malloc(sizeof(int));
+  if (two == NULL) exit(0);
+  *two = 2;
+
+  int *three = (int *)orig_malloc(sizeof(int));
+  if (three == NULL) exit(0);
+  *three = 3;
+
+  printf("--- alloc again ---\n");
+  printf("*two  %d\n", *two);
+  printf("two %p\n", two);
+  printf("*three %d\n", *three);
+  printf("three %p\n", three);
+  printf("--- end ---\n");
 
   return 0;
 }
