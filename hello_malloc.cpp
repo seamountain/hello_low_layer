@@ -18,39 +18,65 @@ void initialize_block() {
   alloc_block->next = alloc_block;
   alloc_block->size = sizeof(arena);
 
-  free_block->size -= sizeof(alloc_block);
-  free_block->size -= sizeof(free_block);
+  printf("sizeof(alloc_block): %lu\n", sizeof(alloc_block));
+
   free_block->prev = (free_block - 1);
   free_block->next = free_block + 1;
   free_block->size = sizeof(arena);
+
+  alloc_block->size += sizeof(alloc_block);
+  free_block->size -= sizeof(free_block);
+
+  printf("free_block->size: %d\n", free_block->size);
+  printf("alloc_block->size: %d\n", alloc_block->size);
 }
 
 void *orig_malloc(size_t size) {
-  alloc_block = alloc_block->next + 1;
+  struct HeapBlock *new_alloc_block = free_block->next;
   struct HeapBlock *block_head = free_block->next;
-  block_head->size = sizeof(block_head);
-  block_head->next = alloc_block;
+  block_head->size = size;
+  block_head->prev = alloc_block->next;
+  HeapBlock *next_block = alloc_block->next;
+  if (next_block && !next_block->next) {
+    next_block->next = (HeapBlock *)&arena;
+  }
+  alloc_block->next = block_head;
 
-  // 返す値は、alloc_blockではなくて、新しくallocしたブロック
-  alloc_block->next = block_head + block_head->size;
-  alloc_block->size += block_head->size + size;
-  free_block->next = alloc_block->next + 1;
-  free_block->size -= block_head->size + size;
-  return alloc_block;
+  alloc_block->next = block_head;
+  alloc_block->size += sizeof(new_alloc_block) + size;
+  free_block->next = alloc_block->next + sizeof(block_head)+ block_head->size + 1;
+  free_block->size -= sizeof(new_alloc_block) + size;
+
+  return new_alloc_block + size;
 }
 
 void orig_free(void *ptr) {
-  struct HeapBlock *block_head = (HeapBlock *)(&ptr - 1);
-  block_head->next->prev = block_head->prev;
-  block_head->prev = free_block;
-  block_head->size = 0;
+  printf("&ptr: %p\n", &ptr);
+  printf("ptr: %p\n", ptr);
+  printf("sizeof(alloc_block): %lu\n", sizeof(alloc_block));
 
-  free_block->size += sizeof(ptr);
-  alloc_block->size -= sizeof(ptr);
+  struct HeapBlock *block_head = (HeapBlock *)(ptr) - sizeof(alloc_block);
 
   if (block_head && alloc_block->next) {
     alloc_block->next = block_head->next;
   }
+
+  if (block_head && free_block->next) {
+    free_block->next = (HeapBlock *)&arena + sizeof(alloc_block);
+  }
+
+  printf("size: %d\n", (int)((HeapBlock *)&ptr)->size);
+  printf("sizeof(ptr): %lu\n", sizeof(ptr));
+  printf("((HeapBlock *)&ptr): %lu\n", ((HeapBlock *)&ptr));
+
+  free_block->size += sizeof(ptr) + block_head->size;
+  alloc_block->size -= sizeof(ptr) + block_head->size;
+
+  block_head->prev = free_block;
+  if (block_head->next) {
+    block_head->next->prev = block_head->prev;
+  }
+  block_head->size = 0;
 }
 
 int main() {
@@ -88,6 +114,7 @@ int main() {
   if (three == NULL) exit(0);
   *three = 3;
 
+  // TODO Check new alloc addres
   printf("--- alloc again ---\n");
   printf("*two  %d\n", *two);
   printf("two %p\n", two);
