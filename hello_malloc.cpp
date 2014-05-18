@@ -21,19 +21,19 @@ void initialize_block() {
 }
 
 void *orig_malloc(size_t size) {
-  struct HeapBlock *new_alloc_block = free_block->next;
-  new_alloc_block->prev = alloc_block->next;
-  alloc_block->next->prev = new_alloc_block;
-  new_alloc_block->next = alloc_block->prev;
-  new_alloc_block->size = size;
-  alloc_block->next = new_alloc_block;
-  alloc_block->size += sizeof(new_alloc_block) + size;
+  struct HeapBlock *head_block = free_block->next;
+  head_block->prev = alloc_block->next;
+  alloc_block->next->prev = head_block;
+  head_block->next = alloc_block->prev;
+  head_block->size = size;
+  alloc_block->next = head_block;
+  alloc_block->size += sizeof(head_block) + size;
 
-  free_block->next = (struct HeapBlock*)((size_t)(new_alloc_block + 1) + size);
+  free_block->next = (struct HeapBlock*)((size_t)(head_block + 1) + size);
   free_block->prev = alloc_block->next;
-  free_block->size -= sizeof(new_alloc_block) + size;
+  free_block->size -= sizeof(head_block) + size;
 
-  return new_alloc_block + 1;
+  return head_block + 1;
 }
 
 void orig_free(void *ptr) {
