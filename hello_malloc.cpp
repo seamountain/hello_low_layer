@@ -10,6 +10,10 @@ struct HeapBlock {
 const int array_size = 10000;
 int arena[array_size];
 struct HeapBlock *alloc_block = new HeapBlock();
+/*same with
+struct HeapBlock alloc_block2;
+struct HeapBlock* alloc_block = &alloc_block;
+*/
 struct HeapBlock *free_block = new HeapBlock();
 
 void initialize_block() {
