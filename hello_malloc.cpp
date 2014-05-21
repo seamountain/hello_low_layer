@@ -25,7 +25,7 @@ void initialize_block() {
 }
 
 void *orig_malloc(size_t size) {
-  struct HeapBlock *head_block = free_block.next;
+  struct HeapBlock* head_block = free_block.next;
   head_block->prev = alloc_block.next;
   alloc_block.next->prev = head_block;
   head_block->next = alloc_block.prev;
@@ -33,7 +33,7 @@ void *orig_malloc(size_t size) {
   alloc_block.next = head_block;
   alloc_block.size += sizeof(head_block) + size;
 
-  free_block.next = (struct HeapBlock*)((size_t)(head_block + 1) + size);
+  free_block.next = (struct HeapBlock *)((size_t)(head_block + 1) + size);
   free_block.prev = alloc_block.next;
   free_block.size -= sizeof(head_block) + size;
 
@@ -41,7 +41,7 @@ void *orig_malloc(size_t size) {
 }
 
 void orig_free(void *ptr) {
-  struct HeapBlock *block_head = (HeapBlock *)(ptr) - sizeof(alloc_block);
+  struct HeapBlock* block_head = (HeapBlock *)(ptr) - sizeof(alloc_block);
 
   if (block_head && alloc_block.next) {
     alloc_block.next = block_head->next;
@@ -67,7 +67,7 @@ int main() {
   assert(alloc_block.size == 0);
   assert(free_block.size == sizeof(arena));
 
-  int *zero = (int *)orig_malloc(sizeof(int));
+  int* zero = (int *)orig_malloc(sizeof(int));
   *zero = 0;
 
   assert(alloc_block.size == (sizeof(HeapBlock *) + sizeof(*zero)));
@@ -75,14 +75,14 @@ int main() {
 
   assert(zero == &arena[0] + (sizeof(HeapBlock) / sizeof(int)));
 
-  int *one = (int *)orig_malloc(sizeof(int));
+  int* one = (int *)orig_malloc(sizeof(int));
   *one = 1;
 
   assert(alloc_block.size == (sizeof(HeapBlock *) * 2 + sizeof(*zero) + sizeof(*one)));
   assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) * 2 + sizeof(*zero + sizeof(*one))));
 
-  struct HeapBlock* block = (struct HeapBlock*)zero - 1;
-  assert((struct HeapBlock*)one - 1 == block->next);
+  struct HeapBlock* block = (struct HeapBlock *)zero - 1;
+  assert((struct HeapBlock *)one - 1 == block->next);
   assert(one == zero + 1 + (sizeof(HeapBlock) / (sizeof(zero) + 1)));
 
   printf("--- result ---\n");
@@ -102,10 +102,10 @@ int main() {
   printf("one %p\n", one);
   printf("--- end ---\n");
 
-  int *two = (int *)orig_malloc(sizeof(int));
+  int* two = (int *)orig_malloc(sizeof(int));
   *two = 2;
 
-  int *three = (int *)orig_malloc(sizeof(int));
+  int* three = (int *)orig_malloc(sizeof(int));
   *three = 3;
 
   // TODO Check new alloc addres
