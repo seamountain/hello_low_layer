@@ -12,8 +12,9 @@ int arena[array_size];
 struct HeapBlock *alloc_block = new HeapBlock();
 /*same with
 struct HeapBlock alloc_block2;
-struct HeapBlock* alloc_block = &alloc_block;
+struct HeapBlock* alloc_block = &alloc_block2;
 */
+
 struct HeapBlock *free_block = new HeapBlock();
 
 void initialize_block() {
