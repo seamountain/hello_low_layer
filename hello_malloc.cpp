@@ -9,34 +9,33 @@ struct HeapBlock {
 
 const int array_size = 10000;
 int arena[array_size];
-struct HeapBlock *alloc_block = new HeapBlock();
+struct HeapBlock alloc_block;
 /*same with
 struct HeapBlock alloc_block2;
 struct HeapBlock* alloc_block = &alloc_block2;
 */
-
-struct HeapBlock *free_block = new HeapBlock();
+struct HeapBlock free_block;
 
 void initialize_block() {
-  alloc_block->next = alloc_block;
-  alloc_block->size = 0;
-  free_block->prev = (HeapBlock *)arena;
-  free_block->next = (HeapBlock *)&arena[0];
-  free_block->size = sizeof(arena);
+  alloc_block.next = &alloc_block;
+  alloc_block.size = 0;
+  free_block.prev = (HeapBlock *)arena;
+  free_block.next = (HeapBlock *)&arena[0];
+  free_block.size = sizeof(arena);
 }
 
 void *orig_malloc(size_t size) {
-  struct HeapBlock *head_block = free_block->next;
-  head_block->prev = alloc_block->next;
-  alloc_block->next->prev = head_block;
-  head_block->next = alloc_block->prev;
+  struct HeapBlock *head_block = free_block.next;
+  head_block->prev = alloc_block.next;
+  alloc_block.next->prev = head_block;
+  head_block->next = alloc_block.prev;
   head_block->size = size;
-  alloc_block->next = head_block;
-  alloc_block->size += sizeof(head_block) + size;
+  alloc_block.next = head_block;
+  alloc_block.size += sizeof(head_block) + size;
 
-  free_block->next = (struct HeapBlock*)((size_t)(head_block + 1) + size);
-  free_block->prev = alloc_block->next;
-  free_block->size -= sizeof(head_block) + size;
+  free_block.next = (struct HeapBlock*)((size_t)(head_block + 1) + size);
+  free_block.prev = alloc_block.next;
+  free_block.size -= sizeof(head_block) + size;
 
   return head_block + 1;
 }
@@ -44,18 +43,18 @@ void *orig_malloc(size_t size) {
 void orig_free(void *ptr) {
   struct HeapBlock *block_head = (HeapBlock *)(ptr) - sizeof(alloc_block);
 
-  if (block_head && alloc_block->next) {
-    alloc_block->next = block_head->next;
+  if (block_head && alloc_block.next) {
+    alloc_block.next = block_head->next;
   }
 
-  if (block_head && free_block->next) {
-    free_block->next = (HeapBlock *)&arena + sizeof(alloc_block);
+  if (block_head && free_block.next) {
+    free_block.next = (HeapBlock *)&arena + sizeof(alloc_block);
   }
 
-  free_block->size += sizeof(ptr) + block_head->size;
-  alloc_block->size -= sizeof(ptr) + block_head->size;
+  free_block.size += sizeof(ptr) + block_head->size;
+  alloc_block.size -= sizeof(ptr) + block_head->size;
 
-  block_head->prev = free_block;
+  block_head->prev = &free_block;
   if (block_head->next) {
     block_head->next->prev = block_head->prev;
   }
@@ -65,22 +64,22 @@ void orig_free(void *ptr) {
 int main() {
   initialize_block();
 
-  assert(alloc_block->size == 0);
-  assert(free_block->size == sizeof(arena));
+  assert(alloc_block.size == 0);
+  assert(free_block.size == sizeof(arena));
 
   int *zero = (int *)orig_malloc(sizeof(int));
   *zero = 0;
 
-  assert(alloc_block->size == (sizeof(HeapBlock *) + sizeof(*zero)));
-  assert(free_block->size == sizeof(arena) - (sizeof(HeapBlock *) + sizeof(*zero)));
+  assert(alloc_block.size == (sizeof(HeapBlock *) + sizeof(*zero)));
+  assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) + sizeof(*zero)));
 
   assert(zero == &arena[0] + (sizeof(HeapBlock) / sizeof(int)));
 
   int *one = (int *)orig_malloc(sizeof(int));
   *one = 1;
 
-  assert(alloc_block->size == (sizeof(HeapBlock *) * 2 + sizeof(*zero) + sizeof(*one)));
-  assert(free_block->size == sizeof(arena) - (sizeof(HeapBlock *) * 2 + sizeof(*zero + sizeof(*one))));
+  assert(alloc_block.size == (sizeof(HeapBlock *) * 2 + sizeof(*zero) + sizeof(*one)));
+  assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) * 2 + sizeof(*zero + sizeof(*one))));
 
   struct HeapBlock* block = (struct HeapBlock*)zero - 1;
   assert((struct HeapBlock*)one - 1 == block->next);
