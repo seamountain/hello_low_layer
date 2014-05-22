@@ -25,19 +25,24 @@ void initialize_block() {
 }
 
 void *orig_malloc(size_t size) {
-  struct HeapBlock* head_block = free_block.next;
-  head_block->prev = alloc_block.next;
-  alloc_block.next->prev = head_block;
-  head_block->next = alloc_block.prev;
-  head_block->size = size;
-  alloc_block.next = head_block;
-  alloc_block.size += sizeof(head_block) + size;
+  //struct HeapBlock* head_block = free_block.next;
+  void* head_block = free_block.next;
+  ((HeapBlock *)head_block)->prev = alloc_block.next;
+  alloc_block.next->prev = (HeapBlock *)head_block;
+  ((HeapBlock *)head_block)->next = alloc_block.prev;
+  ((HeapBlock *)head_block)->size = size;
+  alloc_block.next = (HeapBlock *)head_block;
+  alloc_block.size += sizeof(HeapBlock *) + size;
 
-  free_block.next = (struct HeapBlock *)((size_t)(head_block + 1) + size);
+  // size(バイト数)分だけ次の番地を取得したい
+  //free_block.next = (struct HeapBlock *)((size_t)(head_block + 1) + size);
+  free_block.next = (HeapBlock *)((char *)head_block + size);
   free_block.prev = alloc_block.next;
-  free_block.size -= sizeof(head_block) + size;
+  free_block.size -= sizeof(HeapBlock *) + size;
 
-  return head_block + 1;
+  printf("free_block.next %p\n", free_block.next);
+
+  return (HeapBlock *)head_block + 1;
 }
 
 void orig_free(void *ptr) {
@@ -82,6 +87,8 @@ int main() {
   assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) * 2 + sizeof(*zero + sizeof(*one))));
 
   struct HeapBlock* block = (struct HeapBlock *)zero - 1;
+  printf("(struct HeapBlock *)one - 1 %p\n", (struct HeapBlock *)one - 1);
+  printf("block->next %p\n", block->next);
   assert((struct HeapBlock *)one - 1 == block->next);
   assert(one == zero + 1 + (sizeof(HeapBlock) / (sizeof(zero) + 1)));
 
