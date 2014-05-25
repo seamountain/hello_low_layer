@@ -48,6 +48,7 @@ void *orig_malloc(size_t size) {
 void orig_free(void *ptr) {
   HeapBlock* block_head = (HeapBlock *)(ptr) - 1;
 
+  // TODO fix prev pointer at malloc
   block_head->next->prev = block_head->prev;
   block_head->prev->next = block_head->next;
 
