@@ -46,24 +46,26 @@ void *orig_malloc(size_t size) {
 }
 
 void orig_free(void *ptr) {
-  struct HeapBlock* block_head = (HeapBlock *)(ptr) - sizeof(alloc_block);
+  HeapBlock* block_head = (HeapBlock *)(ptr) - 1;
 
-  if (block_head && alloc_block.next) {
-    alloc_block.next = block_head->next;
+  block_head->next->prev = block_head->prev;
+  block_head->prev->next = block_head->next;
+
+  if (alloc_block.prev == ptr) {
+    alloc_block.prev = block_head->prev;
+  } else if (alloc_block.next == ptr) {
+    alloc_block.next = block_head->prev;
+    alloc_block.prev = block_head->prev->prev;
   }
 
-  if (block_head && free_block.next) {
-    free_block.next = (HeapBlock *)&arena + sizeof(alloc_block);
+  if (free_block.prev == ptr) {
+    HeapBlock* lastBlock = alloc_block.next;
+    while(lastBlock != NULL) {
+      lastBlock = lastBlock->next;
+    }
+    free_block.prev = lastBlock;
+    free_block.next = (HeapBlock *)((int8_t *)lastBlock + lastBlock->size);
   }
-
-  free_block.size += sizeof(ptr) + block_head->size;
-  alloc_block.size -= sizeof(ptr) + block_head->size;
-
-  block_head->prev = &free_block;
-  if (block_head->next) {
-    block_head->next->prev = block_head->prev;
-  }
-  block_head->size = 0;
 }
 
 int main() {
