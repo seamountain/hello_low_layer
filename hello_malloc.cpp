@@ -18,7 +18,7 @@ struct HeapBlock free_block;
 
 void initialize_block() {
   alloc_block.prev = (HeapBlock *)arena;
-  alloc_block.next = (HeapBlock *)arena;
+  alloc_block.next = &alloc_block;
   alloc_block.size = 0;
   free_block.prev = (HeapBlock *)arena;
   free_block.next = (HeapBlock *)arena;
@@ -100,22 +100,8 @@ int main() {
   // TODO below assertion is failed
   //assert(one_head->next == NULL);
 
-  printf("--- result ---\n");
-  printf("*zero %d\n", *zero);
-  printf("zero %p\n", zero);
-  printf("*one %d\n", *one);
-  printf("one %p\n", one);
-  printf("--- end ---\n");
-
   orig_free(zero);
   orig_free(one);
-
-  printf("--- after free ---\n");
-  printf("*zero %d\n", *zero);
-  printf("zero %p\n", zero);
-  printf("*one %d\n", *one);
-  printf("one %p\n", one);
-  printf("--- end ---\n");
 
   int* two = (int *)orig_malloc(sizeof(int));
   *two = 2;
