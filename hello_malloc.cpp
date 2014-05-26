@@ -37,13 +37,10 @@ void *orig_malloc(size_t size) {
   alloc_block.size += sizeof(head_block) + size;
 
   free_block.prev = free_block.next;
-  free_block.next = (HeapBlock *)((uint8_t *)head_block + size);
-  //free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
+  free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
   free_block.size -= sizeof(HeapBlock *) + size;
 
-  printf("free_block.next %p\n", free_block.next);
-
-  return (HeapBlock *)head_block + 1;
+  return head_block + 1;
 }
 
 void orig_free(void *ptr) {
@@ -91,18 +88,12 @@ int main() {
   assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) * 2 + sizeof(*zero + sizeof(*one))));
 
   struct HeapBlock* zero_head = (HeapBlock *)zero - 1;
-  printf("zero_head->prev %p\n", zero_head->prev); // 0xa4c30200a4c3020
-  // TODO below assertion is failed
-  //assert(zero_head->prev == (HeapBlock *)arena);
+  assert(zero_head->prev == &alloc_block);
   assert(zero_head->next == (HeapBlock *)one - 1);
 
   struct HeapBlock* one_head = (HeapBlock *)one - 1;
-  printf("one_head->prev %p\n", one_head->prev); // 0xa4c30240a4c302
-  // TODO below assertion is failed
-  //assert(one_head->prev == (struct HeapBlock *)zero - 1);
-  printf("one_head->next %p\n", one_head->next); // 0x1
-  // TODO below assertion is failed
-  //assert(one_head->next == NULL);
+  assert(one_head->prev == (struct HeapBlock *)zero - 1);
+  assert(one_head->next == NULL);
 
   orig_free(zero);
   orig_free(one);
