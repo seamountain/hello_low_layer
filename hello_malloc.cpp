@@ -38,6 +38,7 @@ void *orig_malloc(size_t size) {
 
   free_block.prev = free_block.next;
   free_block.next = (HeapBlock *)((uint8_t *)head_block + size);
+  //free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
   free_block.size -= sizeof(HeapBlock *) + size;
 
   printf("free_block.next %p\n", free_block.next);
