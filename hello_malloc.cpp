@@ -65,6 +65,9 @@ void orig_free(void *ptr) {
     free_block.prev = lastBlock;
     free_block.next = (HeapBlock *)((int8_t *)lastBlock + lastBlock->size);
   }
+
+  alloc_block.size -= sizeof(HeapBlock *) + sizeof(ptr);
+  free_block.size += sizeof(HeapBlock *) + sizeof(ptr);
 }
 
 int main() {
@@ -95,7 +98,14 @@ int main() {
   assert(one_head->prev == (struct HeapBlock *)zero - 1);
   assert(one_head->next == NULL);
 
+
   orig_free(zero);
+  assert(((HeapBlock *)one - 1)->prev == &alloc_block);
+  assert(((HeapBlock *)one - 1)->next == NULL);
+  printf("free_block.size  %d\n", free_block.size);
+  printf("alloc_block.size  %d\n", alloc_block.size);
+  assert(alloc_block.size == sizeof(HeapBlock *) + sizeof(one));
+  assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) + sizeof(one)));
   orig_free(one);
 
   int* two = (int *)orig_malloc(sizeof(int));
