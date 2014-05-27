@@ -46,8 +46,9 @@ void *orig_malloc(size_t size) {
 void orig_free(void *ptr) {
   HeapBlock* block_head = (HeapBlock *)(ptr) - 1;
 
-  // TODO fix prev pointer at malloc
-  block_head->next->prev = block_head->prev;
+  if (block_head->next != NULL) {
+    block_head->next->prev = block_head->prev;
+  }
   block_head->prev->next = block_head->next;
 
   if (alloc_block.prev == ptr) {
@@ -66,8 +67,8 @@ void orig_free(void *ptr) {
     free_block.next = (HeapBlock *)((int8_t *)lastBlock + lastBlock->size);
   }
 
-  alloc_block.size -= sizeof(HeapBlock *) + sizeof(ptr);
-  free_block.size += sizeof(HeapBlock *) + sizeof(ptr);
+  alloc_block.size -= sizeof(HeapBlock *) + block_head->size;
+  free_block.size += sizeof(HeapBlock *) + block_head->size;
 }
 
 int main() {
@@ -102,25 +103,19 @@ int main() {
   orig_free(zero);
   assert(((HeapBlock *)one - 1)->prev == &alloc_block);
   assert(((HeapBlock *)one - 1)->next == NULL);
-  printf("free_block.size  %d\n", free_block.size);
-  printf("alloc_block.size  %d\n", alloc_block.size);
-  assert(alloc_block.size == sizeof(HeapBlock *) + sizeof(one));
-  assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) + sizeof(one)));
-  orig_free(one);
+  assert(alloc_block.size == sizeof(HeapBlock *) + sizeof(int));
+  assert(free_block.size == sizeof(arena) - (sizeof(HeapBlock *) + sizeof(int)));
 
+  orig_free(one);
+  assert(alloc_block.size == 0);
+  assert(free_block.size == sizeof(arena));
+
+  // TODO Segumentation fault
   int* two = (int *)orig_malloc(sizeof(int));
   *two = 2;
 
   int* three = (int *)orig_malloc(sizeof(int));
   *three = 3;
-
-  // TODO Check new alloc addres
-  printf("--- alloc again ---\n");
-  printf("*two  %d\n", *two);
-  printf("two %p\n", two);
-  printf("*three %d\n", *three);
-  printf("three %p\n", three);
-  printf("--- end ---\n");
 
   return 0;
 }
