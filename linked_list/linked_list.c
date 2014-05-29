@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 
 struct Cell {
@@ -10,8 +11,10 @@ struct Cell {
 struct Cell* firstCell = NULL;
 
 struct Cell* create(int value) {
-  // TODO fix
-  struct Cell* cell = { NULL, NULL, value };
+  struct Cell* cell = (struct Cell*)malloc(sizeof(struct Cell*));
+  cell->prev = NULL;
+  cell->next = NULL;
+  cell->value = value;
   return cell;
 }
 
@@ -36,7 +39,12 @@ struct Cell* pop() {
   while (lastCell->next != NULL) {
     lastCell = lastCell->next;
   }
-  lastCell->prev->next = NULL;
+
+  if (lastCell->prev == NULL) {
+    firstCell = NULL;
+  } else {
+    lastCell->prev->next = NULL;
+  }
   return lastCell;
 }
 
@@ -76,7 +84,8 @@ int main() {
   push(cell_1);
   push(cell_2);
 
-  struct Cell* first_pop = pop();
-  assert(first_pop == cell_2);
-
+  assert(pop() == cell_2);
+  assert(pop() == cell_1);
+  assert(pop() == cell_0);
+  assert(pop() == NULL);
 }
