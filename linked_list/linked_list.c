@@ -65,8 +65,8 @@ struct Cell* find(int value) {
   if (firstCell == NULL) {
     return firstCell;
   }
-  struct Cell* targetCell = firstCell;
-  while (targetCell->next != NULL) {
+  struct Cell* targetCell = firstCell->next;
+  while (targetCell != NULL) {
     if (targetCell->value == value) {
       break;
     }
@@ -80,9 +80,13 @@ int main() {
   struct Cell* cell_1 = create(1);
   struct Cell* cell_2 = create(2);
 
+  assert(find(0) == NULL);
+
   push(cell_0);
   push(cell_1);
   push(cell_2);
+
+  assert(find(-1) == NULL);
 
   assert(pop() == cell_2);
   assert(pop() == cell_1);
