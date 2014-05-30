@@ -13,6 +13,7 @@ struct Cell* firstCell = NULL;
 struct Cell* create(int value) {
   // 間違えてCell*にしてしまったので、複数回createを実行すると、
   // Cell同士で番地が被り、意図しない代入が行われてしまった
+  // 別途注意: http://www.ss.cs.meiji.ac.jp/CCP055.html
   struct Cell* cell = (struct Cell*)malloc(sizeof(struct Cell));
   cell->prev = NULL;
   cell->next = NULL;
