@@ -126,6 +126,15 @@ int main() {
   assert(f_res_2->value == cell_2->value);
 
 
+  // TEST Linked list
+  // 正しい状態でリンクされている
+  assert(f_res_0->prev == NULL);
+  assert(f_res_0->next == f_res_1);
+  assert(f_res_1->prev == f_res_0);
+  assert(f_res_1->next == f_res_2);
+  assert(f_res_2->next == NULL);
+
+
   // TEST pop()
   struct Cell* p_res_0 = pop();
   struct Cell* p_res_1 = pop();
