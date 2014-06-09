@@ -17,6 +17,8 @@ struct HeapBlock alloc_block;
 struct HeapBlock free_block;
 
 void initialize_block() {
+  printf("&arena %p \n", &arena);
+  printf("&arena[array_size] %p \n", &arena[array_size]);
   alloc_block.prev = NULL;
   alloc_block.next = NULL;
   alloc_block.size = 0;
@@ -26,10 +28,7 @@ void initialize_block() {
 }
 
 void *orig_malloc(size_t size) {
-  printf("free_block->next %p\n", free_block.next);
   HeapBlock* head_block = (HeapBlock *)free_block.next;
-  // initialize
-  // TODO segumentation fault
   head_block->next = NULL;
   head_block->prev = NULL;
   head_block->size = 0;
@@ -47,7 +46,11 @@ void *orig_malloc(size_t size) {
 
   //free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
   if (free_block.next != NULL) {
-    free_block.next = free_block.next->next;
+    if (free_block.next->next != NULL) {
+      free_block.next = (HeapBlock *)free_block.next->next;
+    } else {
+      free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
+    }
   } else {
     free_block.next = (HeapBlock *)((uint8_t *)(head_block + 1) + size);
   }
@@ -59,28 +62,28 @@ void *orig_malloc(size_t size) {
 void orig_free(void *ptr) {
   HeapBlock* block_head = (HeapBlock *)(ptr) - 1;
 
-  printf("%d \n", block_head->size);
-
+  // alloc_block
   block_head->prev->next = block_head->next;
   if (block_head->next != NULL) {
     block_head->next->prev = block_head->prev;
   }
+  alloc_block.size -= sizeof(HeapBlock *) + block_head->size;
 
+  // free_block
   block_head->next = free_block.next;
-  block_head->prev = free_block.next->prev;
-  free_block.next = block_head;
+  block_head->prev = &free_block;
   if (free_block.next != NULL) {
     free_block.next->prev = block_head;
   }
+  free_block.next = block_head;
 
-  alloc_block.size -= sizeof(HeapBlock *) + block_head->size;
   free_block.size += sizeof(HeapBlock *) + block_head->size;
 }
 
 int main() {
   initialize_block();
 
-  printf("FIRST TEST START\n");
+  printf("--- FIRST TEST START ---\n");
 
   // TEST initialize_block()
   // 正しい値で初期化されていること
@@ -102,10 +105,8 @@ int main() {
   // 正しい位置が返ってくること
   assert(zero == (int *)((HeapBlock *)&arena + 1));
 
-
   int* one = (int *)orig_malloc(sizeof(int));
   *one = 1;
-
 
   // 正しいサイズが使用されていること
   assert(alloc_block.size == (sizeof(HeapBlock *) * 2 + sizeof(*zero) + sizeof(*one)));
@@ -123,8 +124,8 @@ int main() {
   assert(one_head->prev == &alloc_block);
   assert(one_head->next == zero_head);
 
-  printf("one %p\n", one);
   printf("zero %p\n", zero);
+  printf("one %p\n", one);
 
   orig_free(zero);
 
@@ -145,10 +146,10 @@ int main() {
   assert(alloc_block.size == 0);
   assert(free_block.size == sizeof(arena));
 
-  printf("FIRST TEST FINISHED\n");
+  printf("--- FIRST TEST FINISHED ---\n");
 
 
-  printf("SECOND TEST START\n");
+  printf("--- SECOND TEST START ---\n");
   // TEST AGAIN
   int* two = (int *)orig_malloc(sizeof(int));
   *two = 2;
@@ -167,7 +168,7 @@ int main() {
   assert(two == (int *)one);
   assert(three == (int *)zero);
 
-  printf("SECOND TEST FINISHED\n");
+  printf("--- SECOND TEST FINISHED ---\n");
 
   return 0;
 }
