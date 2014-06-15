@@ -13,6 +13,7 @@ int main() {
 	/*ore_mem_init(address, size); そのアドレスとサイズしか使わなくなるから、ここで初期化する*/
 	int* i = malloc(sizeof (int));
 	Hello* s = malloc(sizeof (Hello));
+	printf("Hello world! before insert 100 %p %i %ld %ld\n", i, *i, sizeof(i), sizeof(*i));
 	*i = 100;
 	printf("Hello world! %p %i %ld %ld\n", i, *i, sizeof(i), sizeof(*i));
 	printf("Hello world! %p %ld %ld\n", s ,sizeof(s), sizeof(*s));
