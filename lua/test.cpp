@@ -1,5 +1,6 @@
 #include <lua.hpp>
 
+// Lua ver 5.1
 // Refer to http://snipplr.com/view/10169/
 void print_msg(lua_State* s, char* msg) {
   luaL_openlibs(s);

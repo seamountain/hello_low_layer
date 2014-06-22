@@ -1,11 +1,16 @@
-default: hello run
+default: test run
+
+sample: build_sample run
 
 # http://stackoverflow.com/questions/8024498/compile-embedded-lua-in-c
-hello:
-	g++ test.cpp -o test.out -llua
+test:
+	g++ test.cpp -o result.out -llua
+
+build_sample:
+	g++ sample.cpp -o result.out -llua
 
 run:
-	./test.out
+	./result.out
 
 clean:
 	rm *.out
