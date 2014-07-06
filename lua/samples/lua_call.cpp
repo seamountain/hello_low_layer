@@ -23,4 +23,5 @@ int main(int argc, char* argv[])
   // close the Lua state
   lua_close(lua_state);
 
+  return 0;
 }

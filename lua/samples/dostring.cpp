@@ -5,6 +5,8 @@ int main(void)
 {
   lua_State *l = luaL_newstate();
   luaL_openlibs(l);
-  luaL_dostring(l, "print(\"Hello from Lua\")");
+  int result = luaL_dostring(l, "print(\"Hello from Lua\")");
   lua_close(l);
+
+  return result;
 }
