@@ -1,6 +1,6 @@
-sample1: lua_call run
+sample_lua_call: lua_call run
 
-sample2: dostring run
+sample_dostring: dostring run
 
 # http://stackoverflow.com/questions/8024498/compile-embedded-lua-in-c
 lua_call:
