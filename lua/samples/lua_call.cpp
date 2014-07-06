@@ -1,10 +1,14 @@
 #include <lua.hpp>
 
-// Lua ver 5.1
+// Lua ver 5.1 -> 5.2.3
 // Refer to http://snipplr.com/view/10169/
 void print_msg(lua_State* s, char* msg) {
   luaL_openlibs(s);
-  lua_getfield(s, LUA_GLOBALSINDEX, "print");
+  // lua_call.cpp:7:19: error: use of undeclared identifier 'LUA_GLOBALSINDEX'
+  //lua_getfield(s, LUA_GLOBALSINDEX, "print");
+
+  // TODO: PANIC: unprotected error in call to Lua API (attempt to call a nil value)
+  lua_getfield(s, LUA_REGISTRYINDEX, "print");
   lua_pushstring(s, msg);
   lua_call(s,1,0);
 }
