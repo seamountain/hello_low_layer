@@ -7,7 +7,7 @@ lua_call:
 	g++ test.cpp -o result.out -llua
 
 dostring: sample.cpp
-	g++ sample.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua -lm -ldl
+	g++ sample.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
 
 run:
 	./result.out
