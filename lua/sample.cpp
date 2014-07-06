@@ -1,9 +1,6 @@
 #include "lua-5.2.3/src/lua.hpp"
 
 // Lua ver 5.2
-// TODO
-// Undefined symbols for architecture x86_64:
-//   "_lua_pcallk", referenced from:
 int main(void)
 {
   lua_State *l = luaL_newstate();
