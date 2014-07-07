@@ -4,13 +4,11 @@
 // Refer to http://snipplr.com/view/10169/
 void print_msg(lua_State* s, char* msg) {
   luaL_openlibs(s);
-  // lua_call.cpp:7:19: error: use of undeclared identifier 'LUA_GLOBALSINDEX'
-  //lua_getfield(s, LUA_GLOBALSINDEX, "print");
 
-  // TODO: PANIC: unprotected error in call to Lua API (attempt to call a nil value)
-  lua_getfield(s, LUA_REGISTRYINDEX, "print");
+  // REFER TO https://github.com/torus/embedding-lua/wiki/API
+  lua_getglobal(s, "print");
   lua_pushstring(s, msg);
-  lua_call(s,1,0);
+  lua_call(s, 1, 0);
 }
 
 // Refer to
@@ -21,7 +19,7 @@ int main(int argc, char* argv[])
   // create new Lua state
   lua_State *lua_state = luaL_newstate();
 
-  char msg[] = "hoge";
+  char msg[] = "Hello lua_call by C";
   print_msg(lua_state, msg);
 
   // close the Lua state
