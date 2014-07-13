@@ -76,5 +76,7 @@ int main(void)
   double result = lua_tonumber(l, -1);
   printf("result: %f\n", result);
 
+  lua_close(l);
+
   return 0;
 }
