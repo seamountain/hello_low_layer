@@ -1,5 +1,5 @@
 function call_c()
-  local r = CFunc()
-  print("Return value from C", r)
+  res = CFunc()
   print("This Lua ver", _VERSION)
+  print("pushstring result ", res)
 end

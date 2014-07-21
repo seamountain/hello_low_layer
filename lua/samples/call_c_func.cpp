@@ -2,9 +2,12 @@
 
 // REFER TO http://marupeke296.com/LUA_No5_CallFuncOfCFromLua.html
 
+// REFER TO http://gamedevgeek.com/tutorials/calling-c-functions-from-lua/
 int CFunc(lua_State *l) {
   printf("This is CFunc \n");
-  return 1;
+  char c_str[] = "String from C";
+  lua_pushstring(l, c_str);
+  return 1; /* return the number of results */
 };
 
 int call_dostring(lua_State *l) {
