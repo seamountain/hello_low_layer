@@ -6,6 +6,8 @@ sample_dofile: dofile run
 
 sample_call_c_func: call_c_func run
 
+sample_input_calc: input_calc run
+
 # http://stackoverflow.com/questions/8024498/compile-embedded-lua-in-c
 print:
 	g++ print.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
@@ -18,6 +20,9 @@ dofile: dofile.cpp
 
 call_c_func: call_c_func.cpp
 	g++ call_c_func.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+
+input_calc: input.cpp
+	g++ input.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
 
 run:
 	./result.out
