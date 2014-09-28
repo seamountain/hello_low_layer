@@ -2,14 +2,17 @@
 #include <unistd.h>
 #include <time.h>
 
-clock_t start_time;
 int fps = 30;
 int frame_count = fps;
 
+int TARGET_FPS = 60;
+// milli seconds per frame
+int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
+
+
 void Update() {
-  if (frame_count == fps) {
+  if (frame_count == TARGET_FPS) {
     // http://www.c-lang.net/clock
-    start_time = clock();
     frame_count = 0;
   } else {
     frame_count++;
@@ -17,29 +20,31 @@ void Update() {
 }
 
 void Draw() {
-  printf("%d \n", frame_count);
   // call lua func
-}
-
-// http://dixq.net/g/03_14.html
-void Wait() {
-  clock_t took_time = clock() - start_time;
-  // TODO fix
-  float wait_time = ((frame_count + 1) / fps) - took_time;
-  if (wait_time > 0) {
-    sleep(wait_time);
-  }
+  printf("%d \n", frame_count);
 }
 
 int main(int argc, char* argv[])
 {
-  start_time = clock();
-  while (1) {
-    //printf("start_time %f \n", (double)start_time);
+  while (true) {
+    clock_t begin = clock();
+
+    // GameLoop
     Update();
     Draw();
-    Wait();
-    //printf("end_time %f \n", (double)clock());
+
+    // wait
+    clock_t end = clock();
+
+    // spent milli seconds
+    double diff = (double)(end - begin) / CLOCKS_PER_SEC * 1000;
+
+    // wait
+    usleep(TARGET_FRAME_TIME - diff - 1);
+    // advanced: wait strictly by switching
+    while (TARGET_FRAME_TIME >= ((double)(clock() - begin) / CLOCKS_PER_SEC * 1000)) {
+      usleep(0);
+    }
   }
   return 0;
 }
