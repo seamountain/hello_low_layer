@@ -28,10 +28,6 @@ void Update(lua_State *l) {
     frame_count++;
   }
 
-  if (luaL_dofile(l, "./game_loop/update.lua")) {
-    printf("error 1: %s\n", lua_tostring(l, -1));
-  }
-
   lua_getglobal(l, "add_data");
   lua_pushnumber(l, pos[aindex]);
 
@@ -63,14 +59,18 @@ void Draw(lua_State *l) {
     SDL_RenderDrawLine(render, x1, pos[i], x2, y2);
   }
   SDL_RenderPresent(render);
+}
+
+// REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
+bool init(lua_State *l) {
+  if (luaL_dofile(l, "./game_loop/update.lua")) {
+    printf("error 1: %s\n", lua_tostring(l, -1));
+  }
 
   if (luaL_dofile(l, "./game_loop/draw.lua")) {
     printf("error 3: %s\n", lua_tostring(l, -1));
   }
-}
 
-// REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
-bool init() {
   // initialize SDL
   if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
 
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
   lua_State *l = luaL_newstate();
   luaL_openlibs(l);
 
-  init();
+  init(l);
 
   size = sizeof(pos) / sizeof(pos[0]);
 
