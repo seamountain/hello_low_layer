@@ -60,7 +60,11 @@ void parse_pushed_data(SDL_Rect* rect, const char* data) {
 
 void get_pushed_data(lua_State *l, SDL_Rect* rects, int size) {
   for (int i = 0; i < size; i++) {
-    const char* data = lua_tostring(l, i);
+    // get most bottm data
+    int index = 1;
+    const char* data = lua_tostring(l, index);
+    lua_remove(l, index);
+
     SDL_Rect rect;
     parse_pushed_data(&rect, data);
     rects[i] = rect;
@@ -84,6 +88,7 @@ void Draw(lua_State *l) {
 
   // this program don't draw with no data
   int stack_size = lua_gettop(l);
+  //printf("stack_size %i\n", stack_size);
   if (stack_size < 1) {
     return;
   }
