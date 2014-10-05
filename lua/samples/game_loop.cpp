@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <time.h>
 #include <OpenGL/glu.h>
@@ -42,22 +43,68 @@ void Update(lua_State *l) {
   }
 }
 
-int x1 = 100;
-//int y1 = 10;
-int x2 = 400;
-int y2 = 400;
+void parse_pushed_data(SDL_Rect* rect, const char* data) {
+// Data example "{ x: 0, y: 0, w: 100, h: 80 }"
+// Actually -> "0 0 100 80"
+
+  //printf("data %s\n", data);
+  char char_data[strlen(data)];
+  strcpy(char_data, data);
+
+  char *tp = strtok(char_data, " ");
+  int target = 0;
+  int splited_data[4];
+  // split data from Lua
+  while (tp != NULL) {
+    splited_data[target] = atoi(tp);
+    tp = strtok(NULL, " ");
+    target++;
+  }
+
+  rect->x = splited_data[0];
+  rect->y = splited_data[1];
+  rect->w = splited_data[2];
+  rect->h = splited_data[3];
+}
+
+void get_pushed_data(lua_State *l, SDL_Rect* rects, int size) {
+  for (int i = 0; i < size; i++) {
+    const char* data = lua_tostring(l, i);
+    SDL_Rect rect;
+    parse_pushed_data(&rect, data);
+    rects[i] = rect;
+  }
+}
+
+void get_random_color(int color[]) {
+  int size = 4;
+  int MAX_COLOR = 256;
+
+  // http://wisdom.sakura.ne.jp/programming/c/c61.html
+  for (int i = 0; i < size; i++) {
+    color[i] = (i < size - 1) ? (rand() % (MAX_COLOR + 1)) : 256;
+  }
+}
 
 void Draw(lua_State *l) {
-  // call lua func
-  //printf("%d \n", frame_count);
-
+  // clear
   SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
   SDL_RenderClear(render);
 
-  SDL_SetRenderDrawColor(render, 100, 155, 80, 255);
-  for (int i = 0; i < size; i++) {
-    SDL_RenderDrawLine(render, x1, pos[i], x2, y2);
+  // this program don't draw with no data
+  int stack_size = lua_gettop(l);
+  if (stack_size < 1) {
+    return;
   }
+
+  SDL_Rect rects[stack_size];
+  get_pushed_data(l, rects, stack_size);
+
+  int color[4];
+  get_random_color(color);
+  SDL_SetRenderDrawColor(render, color[0], color[1], color[2], color[3]);
+
+  SDL_RenderFillRects(render, rects, stack_size);
   SDL_RenderPresent(render);
 }
 
@@ -85,6 +132,8 @@ bool init(lua_State *l) {
   context = SDL_GL_CreateContext(w);
 
   render = SDL_CreateRenderer(w, -1, 0);
+
+  srand((unsigned)time(NULL));
 
   return true;
 }
