@@ -124,8 +124,6 @@ bool init(lua_State *l) {
 
   render = SDL_CreateRenderer(w, -1, 0);
 
-  srand((unsigned)time(NULL));
-
   return true;
 }
 
@@ -168,6 +166,9 @@ int main(int argc, char* argv[])
   luaL_openlibs(l);
 
   init(l);
+
+  // initialize rand
+  srand((unsigned)time(NULL));
 
   while (true) {
     // check event
