@@ -1,4 +1,4 @@
-function add_data(i)
+function add_data()
   -- x, y, w, h
   data_size = 4
   data_table = ""

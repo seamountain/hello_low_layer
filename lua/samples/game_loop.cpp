@@ -18,8 +18,6 @@ int SCREEN_HEIGHT = 640;
 
 int frame_count = 0;
 int aindex = 0;
-int pos[1000];
-int size;
 
 void Update(lua_State *l) {
   if (frame_count == TARGET_FPS) {
@@ -30,16 +28,9 @@ void Update(lua_State *l) {
   }
 
   lua_getglobal(l, "add_data");
-  lua_pushnumber(l, pos[aindex]);
 
-  if (lua_pcall(l, 1, 1, 0)) {
+  if (lua_pcall(l, 0, 1, 0)) {
     printf("error 2: %s\n", lua_tostring(l, -1));
-  }
-  pos[aindex] = lua_tonumber(l, -1);
-  aindex++;
-
-  if (size < aindex) {
-    aindex = 0;
   }
 }
 
@@ -177,8 +168,6 @@ int main(int argc, char* argv[])
   luaL_openlibs(l);
 
   init(l);
-
-  size = sizeof(pos) / sizeof(pos[0]);
 
   while (true) {
     // check event
