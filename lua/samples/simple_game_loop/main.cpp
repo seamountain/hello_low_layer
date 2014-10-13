@@ -112,10 +112,12 @@ void Draw(lua_State *l) {
 bool init(lua_State *l) {
     if (luaL_dofile(l, "./lua/update.lua")) {
         printf("error 1: %s\n", lua_tostring(l, -1));
+        return false;
     }
 
     if (luaL_dofile(l, "./lua/draw.lua")) {
         printf("error 3: %s\n", lua_tostring(l, -1));
+        return false;
     }
 
     // initialize SDL
@@ -174,7 +176,9 @@ int main(int argc, char* argv[])
     lua_State *l = luaL_newstate();
     luaL_openlibs(l);
 
-    init(l);
+    if (!init(l)) {
+        return 1;
+    };
 
     // initialize rand
     srand((unsigned)time(NULL));
