@@ -110,12 +110,17 @@ void Draw(lua_State *l) {
 
 // REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
 bool init(lua_State *l) {
-    if (luaL_dofile(l, "./lua/update.lua")) {
+    // TODO fix path
+    string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/simple_game_loop/";
+
+    string updateScript = path + "lua/update.lua";
+    if (luaL_dofile(l, updateScript.c_str())) {
         printf("error 1: %s\n", lua_tostring(l, -1));
         return false;
     }
 
-    if (luaL_dofile(l, "./lua/draw.lua")) {
+    string drawScript = path + "lua/update.lua";
+    if (luaL_dofile(l, drawScript.c_str())) {
         printf("error 3: %s\n", lua_tostring(l, -1));
         return false;
     }
