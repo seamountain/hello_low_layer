@@ -27,7 +27,7 @@ input_calc: input.cpp
 	g++ input.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
 
 game_loop: game_loop.cpp
-	g++ game_loop.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua -g `sdl2-config --cflags` `sdl2-config --libs` -framework GLUT -framework OpenGL
+	g++ game_loop.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua -g `sdl2-config --cflags --libs`
 
 run:
 	./result.out
