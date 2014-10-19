@@ -6,11 +6,10 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-function add_data()
-    x = math.random(500)
-    y = math.random(500)
-    width = math.random(10)
-    height = math.random(10)
+function add_data(x, y)
+    brash_size = 15;
+    width = brash_size;
+    height = brash_size;
 
     registerData(x, y, width, height)
 end

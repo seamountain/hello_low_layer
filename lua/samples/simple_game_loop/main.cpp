@@ -27,12 +27,6 @@ void Update(lua_State *l) {
     } else {
         frame_count++;
     }
-
-    lua_getglobal(l, "add_data");
-
-    if (lua_pcall(l, 0, 1, 0)) {
-        printf("error 2: %s\n", lua_tostring(l, -1));
-    }
 }
 
 vector<Data*> data_list;
@@ -46,8 +40,6 @@ int registerData(lua_State* l) {
     Data *data = new Data(x, y, width, height);
     data_list.push_back(data);
 
-//    printf("data_list.size() %lu\n", data_list.size());
-
     return 0; // 戻り値は無し
 }
 
@@ -55,13 +47,6 @@ void Draw(lua_State *l) {
     // clear
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderClear(render);
-
-    // this program don't draw with no data
-    int stack_size = lua_gettop(l);
-    //printf("stack_size %i\n", stack_size);
-    if (stack_size < 1) {
-        return;
-    }
 
     int color[4] = {100, 200, 120, 256};
     SDL_SetRenderDrawColor(render, color[0], color[1], color[2], color[3]);
@@ -117,26 +102,43 @@ bool init(lua_State *l) {
     return true;
 }
 
-bool pollingEvent()
+void call_lua(lua_State *l, int x, int y) {
+    lua_getglobal(l, "add_data");
+    lua_pushnumber(l, x);
+    lua_pushnumber(l, y);
+
+    if (lua_pcall(l, 2, 0, 0)) {
+        printf("error: %s\n", lua_tostring(l, -1));
+    }
+}
+
+bool isMoving = false;
+bool pollingEvent(lua_State *l)
 {
     SDL_Event ev;
     SDL_Keycode key;
     while ( SDL_PollEvent(&ev) )
     {
         switch(ev.type){
-            case SDL_QUIT:
-                // raise when exit event is occur
+            case SDL_QUIT: // raise when exit event is occur
                 return false;
-                break;
-            case SDL_KEYDOWN:
-                // raise when key down
-            {
+            case SDL_KEYDOWN: // raise when key down
                 key = ev.key.keysym.sym;
                 // ESC
                 if(key == SDLK_ESCAPE){
                     return false;
                 }
-            }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                isMoving = true;
+                break;
+            case SDL_MOUSEBUTTONUP:
+                isMoving = false;
+                break;
+            case SDL_MOUSEMOTION:
+                if (isMoving) {
+                    call_lua(l, ev.button.x, ev.button.y);
+                }
                 break;
         }
     }
@@ -164,7 +166,7 @@ int main(int argc, char* argv[])
 
     while (true) {
         // check event
-        if (!pollingEvent()) break;
+        if (!pollingEvent(l)) break;
 
         clock_t begin = clock();
 
