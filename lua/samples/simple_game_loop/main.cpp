@@ -1,15 +1,12 @@
 #include <iostream>
+#include <unistd.h>
+#include <vector>
+#include "Data.cpp"
+#include "libs/lua-5.2.3/include/lua.hpp"
+#include "libs/lua-5.2.3/include/lualib.h"
+#include "libs/SDL2-2.0.3/include/SDL.h"
 
 using namespace std;
-
-//int main() {
-//    cout << "Hello, World!" << endl;
-//    return 0;
-//}
-
-#include <unistd.h>
-#include "libs/lua-5.2.3/include/lua.hpp"
-#include "libs/SDL2-2.0.3/include/SDL.h"
 
 int TARGET_FPS = 60;
 // milli seconds per frame
@@ -38,51 +35,20 @@ void Update(lua_State *l) {
     }
 }
 
-void parse_pushed_data(SDL_Rect* rect, const char* data) {
-// Data example "{ x: 0, y: 0, w: 100, h: 80 }"
-// Actually -> "0 0 100 80"
+vector<Data*> data_list;
 
-    //printf("data %s\n", data);
-    char char_data[strlen(data)];
-    strcpy(char_data, data);
+int registerData(lua_State* l) {
+    int x = luaL_checkint(l, -4);
+    int y = luaL_checkint(l, -3);
+    int width = luaL_checkint(l, -2);
+    int height = luaL_checkint(l, -1);
 
-    char *tp = strtok(char_data, " ");
-    int target = 0;
-    int splited_data[4];
-    // split data from Lua
-    while (tp != NULL) {
-        splited_data[target] = atoi(tp);
-        tp = strtok(NULL, " ");
-        target++;
-    }
+    Data *data = new Data(x, y, width, height);
+    data_list.push_back(data);
 
-    rect->x = splited_data[0];
-    rect->y = splited_data[1];
-    rect->w = splited_data[2];
-    rect->h = splited_data[3];
-}
+//    printf("data_list.size() %lu\n", data_list.size());
 
-void get_pushed_data(lua_State *l, SDL_Rect* rects, int size) {
-    for (int i = 0; i < size; i++) {
-        // get most bottm data
-        int index = 1;
-        const char* data = lua_tostring(l, index);
-        lua_remove(l, index);
-
-        SDL_Rect rect;
-        parse_pushed_data(&rect, data);
-        rects[i] = rect;
-    }
-}
-
-void get_random_color(int color[]) {
-    int size = 4;
-    int MAX_COLOR = 256;
-
-    // http://wisdom.sakura.ne.jp/programming/c/c61.html
-    for (int i = 0; i < size; i++) {
-        color[i] = (i < size - 1) ? (rand() % (MAX_COLOR + 1)) : 256;
-    }
+    return 0; // 戻り値は無し
 }
 
 void Draw(lua_State *l) {
@@ -97,14 +63,20 @@ void Draw(lua_State *l) {
         return;
     }
 
-    SDL_Rect rects[stack_size];
-    get_pushed_data(l, rects, stack_size);
-
-    int color[4];
-    get_random_color(color);
+    int color[4] = {100, 200, 120, 256};
     SDL_SetRenderDrawColor(render, color[0], color[1], color[2], color[3]);
 
-    SDL_RenderFillRects(render, rects, stack_size);
+    int data_size = data_list.size();
+    SDL_Rect rects[data_size];
+    for (int i = 0; i < data_size; i++) {
+        SDL_Rect r;
+        r.x = data_list[i]->getX();
+        r.y = data_list[i]->getY();
+        r.w = data_list[i]->getWidth();
+        r.h = data_list[i]->getHeight();
+        rects[i] = r;
+    }
+    SDL_RenderFillRects(render, rects, data_size);
     SDL_RenderPresent(render);
 }
 
@@ -124,6 +96,8 @@ bool init(lua_State *l) {
         printf("error 3: %s\n", lua_tostring(l, -1));
         return false;
     }
+
+    lua_register(l, "registerData", registerData);
 
     // initialize SDL
     if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
@@ -213,6 +187,7 @@ int main(int argc, char* argv[])
     }
 
     dealloc();
+    lua_close(l);
 
     return 0;
 }

@@ -7,19 +7,10 @@
 --
 
 function add_data()
-    -- x, y, w, h
-    data_size = 4
-    data_table = ""
+    x = math.random(500)
+    y = math.random(500)
+    width = math.random(10)
+    height = math.random(10)
 
-    for i = 1, data_size do
-        data_table = data_table .. math.random(300)
-        -- add delimiter
-        if (i ~= data_table) then
-            data_table = data_table .. " "
-        end
-    end
-
-    return data_table;
+    registerData(x, y, width, height)
 end
-
-
