@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include "Color.cpp"
 #include "Data.cpp"
 #include "libs/lua-5.2.3/include/lua.hpp"
 #include "libs/lua-5.2.3/include/lualib.h"
@@ -20,6 +21,8 @@ int SCREEN_HEIGHT = 640;
 
 int frame_count = 0;
 
+Palette current_palette = Palette::Black;
+
 void Update(lua_State *l) {
     if (frame_count == TARGET_FPS) {
         // http://www.c-lang.net/clock
@@ -37,10 +40,37 @@ int registerData(lua_State* l) {
     int width = luaL_checkint(l, -2);
     int height = luaL_checkint(l, -1);
 
-    Data *data = new Data(x, y, width, height);
+    Color* color = new Color(current_palette);
+    Data* data = new Data(x, y, width, height, color);
     data_list.push_back(data);
 
     return 0; // 戻り値は無し
+}
+
+void setup_palette_button() {
+    Color* red = new Color(Palette::Red);
+    Color* green = new Color(Palette::Green);
+    Color* blue = new Color(Palette::Blue);
+    Color* black = new Color(Palette::Black);
+    Color* white = new Color(Palette::White);
+    vector<Color*> palettes = {red, green, blue, black, white};
+
+    int margin = 10;
+    int width = 50;
+    int height = 50;
+    for (int i = 0; i < (int)Palette::SIZE; i++) {
+        SDL_Rect r;
+        r.x = margin;
+        r.y = height * i + margin * (i + 1);
+        r.w = width;
+        r.h = height;
+
+//        printf("r %i, g %i, b %i, a %i\n", palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a);
+        if (SDL_SetRenderDrawColor(render, palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a) < 0) {
+            printf("SDL Error %s\n", SDL_GetError());
+        }
+        SDL_RenderFillRect(render, &r);
+    }
 }
 
 void Draw(lua_State *l) {
@@ -48,20 +78,21 @@ void Draw(lua_State *l) {
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderClear(render);
 
-    int color[4] = {100, 200, 120, 256};
-    SDL_SetRenderDrawColor(render, color[0], color[1], color[2], color[3]);
-
     int data_size = data_list.size();
-    SDL_Rect rects[data_size];
     for (int i = 0; i < data_size; i++) {
         SDL_Rect r;
         r.x = data_list[i]->getX();
         r.y = data_list[i]->getY();
         r.w = data_list[i]->getWidth();
         r.h = data_list[i]->getHeight();
-        rects[i] = r;
+
+        Color* color = data_list[i]->getColor();
+        SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
+        SDL_RenderFillRect(render, &r);
     }
-    SDL_RenderFillRects(render, rects, data_size);
+
+    setup_palette_button();
+
     SDL_RenderPresent(render);
 }
 
@@ -99,6 +130,8 @@ bool init(lua_State *l) {
 
     render = SDL_CreateRenderer(w, -1, 0);
 
+    setup_palette_button();
+
     return true;
 }
 
@@ -110,6 +143,10 @@ void call_lua(lua_State *l, int x, int y) {
     if (lua_pcall(l, 2, 0, 0)) {
         printf("error: %s\n", lua_tostring(l, -1));
     }
+}
+
+void select_palette(int x, int y) {
+
 }
 
 bool isMoving = false;
@@ -138,6 +175,8 @@ bool pollingEvent(lua_State *l)
             case SDL_MOUSEMOTION:
                 if (isMoving) {
                     call_lua(l, ev.button.x, ev.button.y);
+                } else {
+                    select_palette(ev.button.x, ev.button.y);
                 }
                 break;
         }
