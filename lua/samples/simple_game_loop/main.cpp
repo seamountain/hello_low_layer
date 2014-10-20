@@ -99,6 +99,7 @@ void Draw() {
 
         Color* color = data_list[i]->getColor();
         SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
+        // TODO use RenderFillRects with same color rects
         SDL_RenderFillRect(render, r);
     }
 
