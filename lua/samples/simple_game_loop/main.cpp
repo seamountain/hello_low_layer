@@ -21,7 +21,15 @@ int SCREEN_HEIGHT = 640;
 
 int frame_count = 0;
 
+Color* red = new Color(Palette::Red);
+Color* green = new Color(Palette::Green);
+Color* blue = new Color(Palette::Blue);
+Color* black = new Color(Palette::Black);
+Color* white = new Color(Palette::White);
+vector<Color*> palettes = {red, green, blue, black, white};
 Palette current_palette = Palette::Black;
+
+vector<SDL_Rect*> palette_buttons_rect;
 
 void Update(lua_State *l) {
     if (frame_count == TARGET_FPS) {
@@ -47,51 +55,54 @@ int registerData(lua_State* l) {
     return 0; // 戻り値は無し
 }
 
-void setup_palette_button() {
-    Color* red = new Color(Palette::Red);
-    Color* green = new Color(Palette::Green);
-    Color* blue = new Color(Palette::Blue);
-    Color* black = new Color(Palette::Black);
-    Color* white = new Color(Palette::White);
-    vector<Color*> palettes = {red, green, blue, black, white};
-
+void init_palette_button() {
     int margin = 10;
     int width = 50;
     int height = 50;
     for (int i = 0; i < (int)Palette::SIZE; i++) {
-        SDL_Rect r;
-        r.x = margin;
-        r.y = height * i + margin * (i + 1);
-        r.w = width;
-        r.h = height;
+        SDL_Rect* r = new SDL_Rect();
+        r->x = margin;
+        r->y = height * i + margin * (i + 1);
+        r->w = width;
+        r->h = height;
+        palette_buttons_rect.push_back(r);
+//        printf("init_palette_button: x %i, y %i, w %i, h %i\n", r->x, r->y, r->w, r->h);
+    }
+//    printf("%lu \n", palette_buttons_rect.size());
+}
 
-//        printf("r %i, g %i, b %i, a %i\n", palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a);
+void draw_palette_button() {
+    for (int i = 0; i < (int)Palette::SIZE; i++) {
+//        printf("draw_palette_button: r %i, g %i, b %i, a %i\n", palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a);
         if (SDL_SetRenderDrawColor(render, palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a) < 0) {
             printf("SDL Error %s\n", SDL_GetError());
         }
-        SDL_RenderFillRect(render, &r);
+
+        SDL_RenderFillRect(render, palette_buttons_rect[i]);
+//        SDL_Rect* r = palette_buttons_rect[i];
+//        printf("draw_palette_button: x %i, y %i, w %i, h %i\n", r->x, r->y, r->w, r->h);
     }
 }
 
-void Draw(lua_State *l) {
+void Draw() {
     // clear
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderClear(render);
 
     int data_size = data_list.size();
     for (int i = 0; i < data_size; i++) {
-        SDL_Rect r;
-        r.x = data_list[i]->getX();
-        r.y = data_list[i]->getY();
-        r.w = data_list[i]->getWidth();
-        r.h = data_list[i]->getHeight();
+        SDL_Rect* r = new SDL_Rect();
+        r->x = data_list[i]->getX();
+        r->y = data_list[i]->getY();
+        r->w = data_list[i]->getWidth();
+        r->h = data_list[i]->getHeight();
 
         Color* color = data_list[i]->getColor();
         SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
-        SDL_RenderFillRect(render, &r);
+        SDL_RenderFillRect(render, r);
     }
 
-    setup_palette_button();
+    draw_palette_button();
 
     SDL_RenderPresent(render);
 }
@@ -130,7 +141,7 @@ bool init(lua_State *l) {
 
     render = SDL_CreateRenderer(w, -1, 0);
 
-    setup_palette_button();
+    init_palette_button();
 
     return true;
 }
@@ -145,11 +156,28 @@ void call_lua(lua_State *l, int x, int y) {
     }
 }
 
-void select_palette(int x, int y) {
-
+void change_selected_color(int palette_index) {
+    current_palette = (Palette)palette_index;
+//    printf("palette_index %i\n", palette_index);
 }
 
-bool isMoving = false;
+bool select_palette(int x, int y) {
+    SDL_Point p = {x, y};
+    for (int i = 0; i < (int)Palette::SIZE; i++) {
+        SDL_Rect* palette_rect = palette_buttons_rect[i];
+        // 当たり判定
+        if ((palette_rect->x <= p.x && p.x <= palette_rect->x + palette_rect->w) &&
+                (palette_rect->y <= p.y && p.y <= palette_rect->y + palette_rect-> h))
+        {
+            change_selected_color(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool is_moving = false;
+bool is_pressed_button = false;
 bool pollingEvent(lua_State *l)
 {
     SDL_Event ev;
@@ -167,16 +195,18 @@ bool pollingEvent(lua_State *l)
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                isMoving = true;
+                is_pressed_button = select_palette(ev.button.x, ev.button.y);
+                if (!is_pressed_button) {
+                    is_moving = true;
+                }
                 break;
             case SDL_MOUSEBUTTONUP:
-                isMoving = false;
+                is_moving = false;
+                is_pressed_button = false;
                 break;
             case SDL_MOUSEMOTION:
-                if (isMoving) {
+                if (is_moving) {
                     call_lua(l, ev.button.x, ev.button.y);
-                } else {
-                    select_palette(ev.button.x, ev.button.y);
                 }
                 break;
         }
@@ -187,6 +217,13 @@ bool pollingEvent(lua_State *l)
 bool dealloc() {
     // finalize SDL
     SDL_Quit();
+
+    // Delete palettes color
+    delete red;
+    delete green;
+    delete blue;
+    delete black;
+    delete white;
 
     return true;
 }
@@ -211,7 +248,7 @@ int main(int argc, char* argv[])
 
         // GameLoop
         Update(l);
-        Draw(l);
+        Draw();
 
         // wait
         clock_t end = clock();
