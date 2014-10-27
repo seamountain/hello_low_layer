@@ -15,7 +15,7 @@ Point.new = function (x, y)
     end
 
     obj.print = function (this)
-        print("x : " .. this.x .. ", y : " .. this.y)
+        print("Point.lua x: " .. this.x .. ", y: " .. this.y)
     end
 
     return obj
