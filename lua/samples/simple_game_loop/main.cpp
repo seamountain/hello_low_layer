@@ -34,6 +34,9 @@ vector<Data*> drawing_data_list;
 
 void call_lua(lua_State *l, Data *data, int index) {
     lua_getglobal(l, "move_data_pos");
+
+//    printf("call_lua index: %i,  x %i, y %i, w %i, h %i\n", index, data->getX(),  data->getY(),  data->getWidth(),  data->getHeight());
+
     // TODO Data型を引数にする
     lua_pushnumber(l, data->getX());
     lua_pushnumber(l, data->getY());
@@ -47,12 +50,17 @@ void call_lua(lua_State *l, Data *data, int index) {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
 
-    int x = (int)lua_tonumber(l, -1);
+    int x = (int)lua_tonumber(l, -3);
     int y = (int)lua_tonumber(l, -2);
-    int d = (int)lua_tonumber(l, -3);
+    int d = (int)lua_tonumber(l, -1);
+
+//    printf("x %i, y %i, d %i\n", x, y, d);
+//    printf("lua_gettop %i\n", lua_gettop(l));
 
     drawing_data_list[index]->setPos(x, y);
     drawing_data_list[index]->setDirection(d);
+
+    lua_settop(l, 0);
 }
 
 void Update(lua_State *l) {
@@ -64,7 +72,9 @@ void Update(lua_State *l) {
     }
 
     for (int i = 0; i < drawing_data_list.size(); i++) {
+//        printf("before i: %i,  x %i, y %i, w %i, h %i\n", i, drawing_data_list[i]->getX(),  drawing_data_list[i]->getY(),  drawing_data_list[i]->getWidth(),  drawing_data_list[i]->getHeight());
         call_lua(l, drawing_data_list[i], i);
+//        printf("after i: %i,  x %i, y %i, w %i, h %i\n", i, drawing_data_list[i]->getX(),  drawing_data_list[i]->getY(),  drawing_data_list[i]->getWidth(),  drawing_data_list[i]->getHeight());
     }
 }
 
@@ -111,6 +121,8 @@ void Draw() {
         r->y = drawing_data_list[i]->getY();
         r->w = drawing_data_list[i]->getWidth();
         r->h = drawing_data_list[i]->getHeight();
+
+//        printf("i: %i,  x %i, y %i, w %i, h %i\n", i, r->x, r->y, r->w, r->h);
 
         Color* color = drawing_data_list[i]->getColor();
         SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
