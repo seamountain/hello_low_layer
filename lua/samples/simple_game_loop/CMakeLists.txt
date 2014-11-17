@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 include_directories("libs/lua-5.2.3/include" "libs/SDL2-2.0.3/include")
 link_directories("libs/lua-5.2.3/lib")
 
-set(SOURCE_FILES main.cpp lua/update.lua lua/draw.lua)
+set(SOURCE_FILES main.cpp lua/update.lua)
 add_executable(simple_game_loop ${SOURCE_FILES})
 
 

@@ -31,8 +31,8 @@ function move_ball(x, y, width, height, screen_width, screen_height)
         y = y + speed
     end
 
-    print(direction)
-    print(x)
-    print(screen_width)
+--    print(direction)
+--    print(x)
+--    print(screen_width)
     register_ball_pos(x, y)
 end
