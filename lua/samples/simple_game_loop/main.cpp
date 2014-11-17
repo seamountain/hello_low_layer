@@ -1,11 +1,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include "libs/SDL2-2.0.3/include/SDL.h"
+#include "libs/lua-5.2.3/include/lua.hpp"
 #include "Color.cpp"
 #include "Data.cpp"
-#include "libs/lua-5.2.3/include/lua.hpp"
-#include "libs/lua-5.2.3/include/lualib.h"
-#include "libs/SDL2-2.0.3/include/SDL.h"
 
 using namespace std;
 

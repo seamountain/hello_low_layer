@@ -1,12 +1,11 @@
-#include <Mono/tiff.h>
 #include "Palette.h"
 
 class Color {
 public:
-    uint8 r;
-    uint8 g;
-    uint8 b;
-    uint8 a;
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    Uint8 a;
     Color(int r, int g, int b, int a);
     Color(Palette selected);
 private:
