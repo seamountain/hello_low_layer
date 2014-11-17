@@ -6,6 +6,7 @@ private:
     int y;
     int width;
     int height;
+    int direction;
     Color* color;
 public:
     Data(int x, int y, int width, int height, Color* color);
@@ -13,7 +14,9 @@ public:
     int getY();
     int getWidth();
     int getHeight();
+    int getDirection();
     Color* getColor();
+    void setDirection(int d);
     void setPos(int x, int y);
     ~Data();
 };
@@ -44,6 +47,14 @@ int Data::getHeight() {
 
 Color* Data::getColor() {
     return this->color;
+}
+
+int Data::getDirection() {
+    return this->direction;
+}
+
+void Data::setDirection(int d) {
+    this->direction = d;
 }
 
 void Data::setPos(int x, int y) {

@@ -6,9 +6,9 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-local direction
-function move_ball(x, y, width, height, screen_width, screen_height)
+function move_ball(x, y, width, height, direction, screen_width, screen_height)
     -- direction: 0 left 1 top 2 right 3 buttom
+--    print("lua before x " .. x .. " y " .. y .. " direction " .. direction)
 
     if x <= 0 then
         direction = 2
@@ -20,7 +20,7 @@ function move_ball(x, y, width, height, screen_width, screen_height)
         direction = 1
     end
 
-    local speed = 5 * (width * height) / 10000
+    local speed = 5 * (width * height) / 100
     if direction == 0 then
         x = x - speed
     elseif direction == 1 then
@@ -31,8 +31,6 @@ function move_ball(x, y, width, height, screen_width, screen_height)
         y = y + speed
     end
 
---    print(direction)
---    print(x)
---    print(screen_width)
-    register_ball_pos(x, y)
+--    print("lua after x " .. x .. " y " .. y .. " direction " .. direction)
+    return x, y, direction
 end

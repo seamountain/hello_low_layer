@@ -31,22 +31,29 @@ Palette current_palette = Palette::Black;
 vector<SDL_Rect*> palette_buttons_rect;
 
 vector<Data*> drawing_data_list;
-//SDL_Rect ball = {0, 0, 20, 20};
 Data* ball;
 
-void call_lua(lua_State *l, Data *data) {
+void call_lua(lua_State *l, Data *data, int index) {
     lua_getglobal(l, "move_ball");
     // TODO Data型を引数にする
     lua_pushnumber(l, data->getX());
     lua_pushnumber(l, data->getY());
     lua_pushnumber(l, data->getWidth());
     lua_pushnumber(l, data->getHeight());
+    lua_pushnumber(l, data->getDirection());
     lua_pushnumber(l, SCREEN_HEIGHT);
     lua_pushnumber(l, SCREEN_WIDTH);
 
-    if (lua_pcall(l, 6, 0, 0)) {
+    if (lua_pcall(l, 7, 3, 0)) {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
+
+    int x = (int)lua_tonumber(l, -1);
+    int y = (int)lua_tonumber(l, -2);
+    int d = (int)lua_tonumber(l, -3);
+
+    drawing_data_list[index]->setPos(x, y);
+    drawing_data_list[index]->setDirection(d);
 }
 
 void Update(lua_State *l) {
@@ -57,16 +64,9 @@ void Update(lua_State *l) {
         frame_count++;
     }
 
-    call_lua(l, ball);
-}
-
-int register_ball_pos(lua_State* l) {
-    int x = luaL_checkint(l, -2);
-    int y = luaL_checkint(l, -1);
-
-    ball->setPos(x, y);
-
-    return 0; // 戻り値は無し
+    for (int i = 0; i < drawing_data_list.size(); i++) {
+        call_lua(l, drawing_data_list[i], i);
+    }
 }
 
 void register_drawing_data(int x, int y) {
@@ -87,34 +87,16 @@ void init_palette_button() {
         r->w = width;
         r->h = height;
         palette_buttons_rect.push_back(r);
-//        printf("init_palette_button: x %i, y %i, w %i, h %i\n", r->x, r->y, r->w, r->h);
     }
-//    printf("%lu \n", palette_buttons_rect.size());
-}
-
-void draw_ball() {
-    if (SDL_SetRenderDrawColor(render, 80, 80, 80, 255) < 0) {
-        printf("SDL Error %s\n", SDL_GetError());
-    }
-
-    SDL_Rect *ballRect = new SDL_Rect();
-    ballRect->x = ball->getX();
-    ballRect->y = ball->getY();
-    ballRect->w = ball->getWidth();
-    ballRect->h = ball->getHeight();
-    SDL_RenderFillRect(render, ballRect);
 }
 
 void draw_palette_button() {
     for (int i = 0; i < (int)Palette::SIZE; i++) {
-//        printf("draw_palette_button: r %i, g %i, b %i, a %i\n", palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a);
         if (SDL_SetRenderDrawColor(render, palettes[i]->r, palettes[i]->g, palettes[i]->b, palettes[i]->a) < 0) {
             printf("SDL Error %s\n", SDL_GetError());
         }
 
         SDL_RenderFillRect(render, palette_buttons_rect[i]);
-//        SDL_Rect* r = palette_buttons_rect[i];
-//        printf("draw_palette_button: x %i, y %i, w %i, h %i\n", r->x, r->y, r->w, r->h);
     }
 }
 
@@ -136,8 +118,6 @@ void Draw() {
         // TODO use RenderFillRects with same color rects
         SDL_RenderFillRect(render, r);
     }
-
-    draw_ball();
 
     draw_palette_button();
 
@@ -161,8 +141,6 @@ bool init(lua_State *l) {
         return false;
     }
 
-    lua_register(l, "register_ball_pos", register_ball_pos);
-
     // initialize SDL
     if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
 
@@ -180,14 +158,11 @@ bool init(lua_State *l) {
 
     init_palette_button();
 
-    ball = new Data(0, 0, 100, 100, black);
-
     return true;
 }
 
 void change_selected_color(int palette_index) {
     current_palette = (Palette)palette_index;
-//    printf("palette_index %i\n", palette_index);
 }
 
 bool select_palette(int x, int y) {
@@ -207,7 +182,7 @@ bool select_palette(int x, int y) {
 
 bool is_moving = false;
 bool is_pressed_button = false;
-bool pollingEvent(lua_State *l)
+bool pollingEvent()
 {
     SDL_Event ev;
     SDL_Keycode key;
@@ -237,6 +212,8 @@ bool pollingEvent(lua_State *l)
                 if (is_moving) {
                     register_drawing_data(ev.button.x, ev.button.y);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -271,7 +248,7 @@ int main(int argc, char* argv[])
 
     while (true) {
         // check event
-        if (!pollingEvent(l)) break;
+        if (!pollingEvent()) break;
 
         clock_t begin = clock();
 
