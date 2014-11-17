@@ -31,6 +31,25 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
+vector<Data*> drawing_data_list;
+//SDL_Rect ball = {0, 0, 20, 20};
+Data* ball;
+
+void call_lua(lua_State *l, Data *data) {
+    lua_getglobal(l, "move_ball");
+    // TODO Data型を引数にする
+    lua_pushnumber(l, data->getX());
+    lua_pushnumber(l, data->getY());
+    lua_pushnumber(l, data->getWidth());
+    lua_pushnumber(l, data->getHeight());
+    lua_pushnumber(l, SCREEN_HEIGHT);
+    lua_pushnumber(l, SCREEN_WIDTH);
+
+    if (lua_pcall(l, 6, 0, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
+    }
+}
+
 void Update(lua_State *l) {
     if (frame_count == TARGET_FPS) {
         // http://www.c-lang.net/clock
@@ -38,21 +57,24 @@ void Update(lua_State *l) {
     } else {
         frame_count++;
     }
+
+    call_lua(l, ball);
 }
 
-vector<Data*> data_list;
+int register_ball_pos(lua_State* l) {
+    int x = luaL_checkint(l, -2);
+    int y = luaL_checkint(l, -1);
 
-int registerData(lua_State* l) {
-    int x = luaL_checkint(l, -4);
-    int y = luaL_checkint(l, -3);
-    int width = luaL_checkint(l, -2);
-    int height = luaL_checkint(l, -1);
-
-    Color* color = new Color(current_palette);
-    Data* data = new Data(x, y, width, height, color);
-    data_list.push_back(data);
+    ball->setPos(x, y);
 
     return 0; // 戻り値は無し
+}
+
+void register_drawing_data(int x, int y) {
+    int brash_size = 10;
+    Color* color = new Color(current_palette);
+    Data* data = new Data(x, y, brash_size, brash_size, color);
+    drawing_data_list.push_back(data);
 }
 
 void init_palette_button() {
@@ -69,6 +91,19 @@ void init_palette_button() {
 //        printf("init_palette_button: x %i, y %i, w %i, h %i\n", r->x, r->y, r->w, r->h);
     }
 //    printf("%lu \n", palette_buttons_rect.size());
+}
+
+void draw_ball() {
+    if (SDL_SetRenderDrawColor(render, 80, 80, 80, 255) < 0) {
+        printf("SDL Error %s\n", SDL_GetError());
+    }
+
+    SDL_Rect *ballRect = new SDL_Rect();
+    ballRect->x = ball->getX();
+    ballRect->y = ball->getY();
+    ballRect->w = ball->getWidth();
+    ballRect->h = ball->getHeight();
+    SDL_RenderFillRect(render, ballRect);
 }
 
 void draw_palette_button() {
@@ -89,19 +124,21 @@ void Draw() {
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderClear(render);
 
-    int data_size = data_list.size();
+    int data_size = drawing_data_list.size();
     for (int i = 0; i < data_size; i++) {
         SDL_Rect* r = new SDL_Rect();
-        r->x = data_list[i]->getX();
-        r->y = data_list[i]->getY();
-        r->w = data_list[i]->getWidth();
-        r->h = data_list[i]->getHeight();
+        r->x = drawing_data_list[i]->getX();
+        r->y = drawing_data_list[i]->getY();
+        r->w = drawing_data_list[i]->getWidth();
+        r->h = drawing_data_list[i]->getHeight();
 
-        Color* color = data_list[i]->getColor();
+        Color* color = drawing_data_list[i]->getColor();
         SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
         // TODO use RenderFillRects with same color rects
         SDL_RenderFillRect(render, r);
     }
+
+    draw_ball();
 
     draw_palette_button();
 
@@ -125,7 +162,7 @@ bool init(lua_State *l) {
         return false;
     }
 
-    lua_register(l, "registerData", registerData);
+    lua_register(l, "register_ball_pos", register_ball_pos);
 
     // initialize SDL
     if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
@@ -144,17 +181,9 @@ bool init(lua_State *l) {
 
     init_palette_button();
 
+    ball = new Data(0, 0, 100, 100, black);
+
     return true;
-}
-
-void call_lua(lua_State *l, int x, int y) {
-    lua_getglobal(l, "add_data");
-    lua_pushnumber(l, x);
-    lua_pushnumber(l, y);
-
-    if (lua_pcall(l, 2, 0, 0)) {
-        printf("error: %s\n", lua_tostring(l, -1));
-    }
 }
 
 void change_selected_color(int palette_index) {
@@ -207,7 +236,7 @@ bool pollingEvent(lua_State *l)
                 break;
             case SDL_MOUSEMOTION:
                 if (is_moving) {
-                    call_lua(l, ev.button.x, ev.button.y);
+                    register_drawing_data(ev.button.x, ev.button.y);
                 }
                 break;
         }

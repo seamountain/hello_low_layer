@@ -14,6 +14,7 @@ public:
     int getWidth();
     int getHeight();
     Color* getColor();
+    void setPos(int x, int y);
     ~Data();
 };
 
@@ -43,6 +44,11 @@ int Data::getHeight() {
 
 Color* Data::getColor() {
     return this->color;
+}
+
+void Data::setPos(int x, int y) {
+    this->x = x;
+    this->y = y;
 }
 
 Data::~Data() {
