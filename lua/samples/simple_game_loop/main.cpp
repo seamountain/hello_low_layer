@@ -31,7 +31,6 @@ Palette current_palette = Palette::Black;
 vector<SDL_Rect*> palette_buttons_rect;
 
 vector<Data*> drawing_data_list;
-Data* ball;
 
 void call_lua(lua_State *l, Data *data, int index) {
     lua_getglobal(l, "move_ball");
@@ -180,8 +179,6 @@ bool select_palette(int x, int y) {
     return false;
 }
 
-bool is_moving = false;
-bool is_pressed_button = false;
 bool pollingEvent()
 {
     SDL_Event ev;
@@ -199,17 +196,7 @@ bool pollingEvent()
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                is_pressed_button = select_palette(ev.button.x, ev.button.y);
-                if (!is_pressed_button) {
-                    is_moving = true;
-                }
-                break;
-            case SDL_MOUSEBUTTONUP:
-                is_moving = false;
-                is_pressed_button = false;
-                break;
-            case SDL_MOUSEMOTION:
-                if (is_moving) {
+                if (!select_palette(ev.button.x, ev.button.y)) {
                     register_drawing_data(ev.button.x, ev.button.y);
                 }
                 break;
