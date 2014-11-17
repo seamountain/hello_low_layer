@@ -33,7 +33,7 @@ vector<SDL_Rect*> palette_buttons_rect;
 vector<Data*> drawing_data_list;
 
 void call_lua(lua_State *l, Data *data, int index) {
-    lua_getglobal(l, "move_ball");
+    lua_getglobal(l, "move_data_pos");
     // TODO Data型を引数にする
     lua_pushnumber(l, data->getX());
     lua_pushnumber(l, data->getY());

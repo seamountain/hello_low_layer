@@ -6,7 +6,7 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-function move_ball(x, y, width, height, direction, screen_width, screen_height)
+function move_data_pos(x, y, width, height, direction, screen_width, screen_height)
     -- direction: 0 left 1 top 2 right 3 buttom
 --    print("lua before x " .. x .. " y " .. y .. " direction " .. direction)
 
