@@ -146,12 +146,6 @@ bool init(lua_State *l) {
         return false;
     }
 
-    string drawScript = path + "lua/update.lua";
-    if (luaL_dofile(l, drawScript.c_str())) {
-        printf("error 3: %s\n", lua_tostring(l, -1));
-        return false;
-    }
-
     // initialize SDL
     if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
 
