@@ -27,6 +27,8 @@ Data::Data(int x, int y, int width, int height, Color* color) {
     this->width = width;
     this->height = height;
     this->color = color;
+
+    this->direction = rand() % 4;
 }
 
 int Data::getX() {
