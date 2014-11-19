@@ -13,6 +13,7 @@ int call_lua_class(lua_State *l, string script) {
 }
 
 // ---- glue code start
+// http://kainoshizuku.blog.fc2.com/blog-entry-15.html
 int lua_point_delete(lua_State* l) {
     Point* p = *(Point**)lua_touserdata(l, 1);
     delete p;
@@ -32,7 +33,7 @@ int lua_point_print_value(lua_State* l) {
 }
 
 // http://www.lifeaether.com/overtaker/blog/?p=819
-// http://kainoshizuku.blog.fc2.com/blog-entry-15.html
+// http://blog.livedoor.jp/take_z_ultima/archives/51686321.html
 void point_alloc(lua_State *l) {
     lua_newuserdata(l, sizeof(Point*));
 
