@@ -31,9 +31,10 @@ int lua_point_print_value(lua_State* l) {
     return 0;
 }
 
-int lua_Point(lua_State *l) {
-    Point** p = (Point**)lua_newuserdata(l, sizeof(Point*));
-    *p = new Point();
+// http://www.lifeaether.com/overtaker/blog/?p=819
+// http://kainoshizuku.blog.fc2.com/blog-entry-15.html
+void point_alloc(lua_State *l) {
+    lua_newuserdata(l, sizeof(Point*));
 
     lua_newtable(l);
     lua_newtable(l);
@@ -47,6 +48,16 @@ int lua_Point(lua_State *l) {
 
     lua_setfield(l, 2, "__index");
     lua_setmetatable(l, 1);
+}
+
+void point_init(lua_State *l) {
+    Point** p = (Point**)lua_touserdata(l, 1);
+    *p = new Point();
+}
+
+int lua_Point(lua_State *l) {
+    point_alloc(l);
+    point_init(l);
 
     return 1;
 }
