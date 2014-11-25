@@ -80,10 +80,8 @@ void data_function_init(lua_State *l) {
 }
 
 int get_target_data(lua_State *l) {
+//    Data** d = (Data**)lua_touserdata(l, 1);
     data_function_init(l);
-
-    Data** d = (Data**)lua_touserdata(l, 1);
-    d = target_data;
 
     return 1;
 }

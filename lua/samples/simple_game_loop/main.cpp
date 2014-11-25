@@ -148,7 +148,6 @@ bool init(lua_State *l) {
 
     init_palette_button();
 
-    data_function_init(l);
     lua_register(l, "get_target_data", get_target_data);
 
     return true;
