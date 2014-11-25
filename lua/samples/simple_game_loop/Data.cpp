@@ -18,6 +18,7 @@ public:
     Color* getColor();
     void setDirection(int d);
     void setPos(int x, int y);
+    void update(int x, int y, int direction);
     ~Data();
 };
 
@@ -62,6 +63,12 @@ void Data::setDirection(int d) {
 void Data::setPos(int x, int y) {
     this->x = x;
     this->y = y;
+}
+
+void Data::update(int x, int y, int direction) {
+    this->x = x;
+    this->y = y;
+    this->direction = direction;
 }
 
 Data::~Data() {

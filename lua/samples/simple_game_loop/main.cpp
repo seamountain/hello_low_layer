@@ -15,10 +15,13 @@ int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
 SDL_Window* w;
 SDL_Renderer* render;
 SDL_GLContext context;
-int SCREEN_WIDTH = 640;
-int SCREEN_HEIGHT = 640;
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 640;
 
 int frame_count = 0;
+
+// TODO ヘッダファイル作成
+#include "lua_glue_code.cpp"
 
 Color* red = new Color(Palette::Red);
 Color* green = new Color(Palette::Green);
@@ -32,49 +35,31 @@ vector<SDL_Rect*> palette_buttons_rect;
 
 vector<Data*> drawing_data_list;
 
-void call_lua(lua_State *l, Data *data, int index) {
+void call_lua(lua_State *l, Data** data, int index) {
+    target_data = data;
+
     lua_getglobal(l, "move_data_pos");
-
-//    printf("call_lua index: %i,  x %i, y %i, w %i, h %i\n", index, data->getX(),  data->getY(),  data->getWidth(),  data->getHeight());
-
-    // TODO Data型を引数にする
-    lua_pushnumber(l, data->getX());
-    lua_pushnumber(l, data->getY());
-    lua_pushnumber(l, data->getWidth());
-    lua_pushnumber(l, data->getHeight());
-    lua_pushnumber(l, data->getDirection());
-    lua_pushnumber(l, SCREEN_HEIGHT);
     lua_pushnumber(l, SCREEN_WIDTH);
+    lua_pushnumber(l, SCREEN_HEIGHT);
 
-    if (lua_pcall(l, 7, 3, 0)) {
+    if (lua_pcall(l, 2, 0, 0)) {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
-
-    int x = (int)lua_tonumber(l, -3);
-    int y = (int)lua_tonumber(l, -2);
-    int d = (int)lua_tonumber(l, -1);
-
-//    printf("x %i, y %i, d %i\n", x, y, d);
-//    printf("lua_gettop %i\n", lua_gettop(l));
-
-    drawing_data_list[index]->setPos(x, y);
-    drawing_data_list[index]->setDirection(d);
 
     lua_settop(l, 0);
 }
 
 void Update(lua_State *l) {
+    // http://www.c-lang.net/clock
     if (frame_count == TARGET_FPS) {
-        // http://www.c-lang.net/clock
         frame_count = 0;
     } else {
         frame_count++;
     }
 
     for (int i = 0; i < drawing_data_list.size(); i++) {
-//        printf("before i: %i,  x %i, y %i, w %i, h %i\n", i, drawing_data_list[i]->getX(),  drawing_data_list[i]->getY(),  drawing_data_list[i]->getWidth(),  drawing_data_list[i]->getHeight());
-        call_lua(l, drawing_data_list[i], i);
-//        printf("after i: %i,  x %i, y %i, w %i, h %i\n", i, drawing_data_list[i]->getX(),  drawing_data_list[i]->getY(),  drawing_data_list[i]->getWidth(),  drawing_data_list[i]->getHeight());
+        // TODO オブジェクト数だけ毎フレームにLuaを読んでいるが直したほうがいいのでは
+        call_lua(l, &drawing_data_list[i], i);
     }
 }
 
@@ -162,6 +147,9 @@ bool init(lua_State *l) {
     render = SDL_CreateRenderer(w, -1, 0);
 
     init_palette_button();
+
+    data_function_init(l);
+    lua_register(l, "get_target_data", get_target_data);
 
     return true;
 }
