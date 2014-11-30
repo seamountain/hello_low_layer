@@ -45,8 +45,6 @@ void call_lua(lua_State *l, Data* data, int index) {
     if (lua_pcall(l, 2, 0, 0)) {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
-
-    lua_settop(l, 0);
 }
 
 void Update(lua_State *l) {
