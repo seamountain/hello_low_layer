@@ -1,5 +1,4 @@
 #include <lua.h>
-#include <ncurses.h>
 #include "libs/lua-5.2.3/include/lua.hpp"
 
 Data* target_data;
