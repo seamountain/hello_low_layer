@@ -1,6 +1,3 @@
-#include <lua.h>
-#include "libs/lua-5.2.3/include/lua.hpp"
-
 Data* target_data;
 
 int update_target_data(lua_State *l) {

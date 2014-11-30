@@ -3,8 +3,8 @@
 #include <vector>
 #include "libs/SDL2-2.0.3/include/SDL.h"
 #include "libs/lua-5.2.3/include/lua.hpp"
-#include "Color.cpp"
-#include "Data.cpp"
+#include "Data.h"
+#include "lua_glue_code.cpp"
 
 using namespace std;
 
@@ -19,9 +19,6 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
 
 int frame_count = 0;
-
-// TODO ヘッダファイル作成
-#include "lua_glue_code.cpp"
 
 Color* red = new Color(Palette::Red);
 Color* green = new Color(Palette::Green);
