@@ -35,7 +35,7 @@ vector<SDL_Rect*> palette_buttons_rect;
 
 vector<Data*> drawing_data_list;
 
-void call_lua(lua_State *l, Data* data, int index) {
+void call_lua(lua_State *l, Data* data) {
     target_data = data;
 
     lua_getglobal(l, "move_data_pos");
@@ -57,7 +57,7 @@ void Update(lua_State *l) {
 
     for (int i = 0; i < drawing_data_list.size(); i++) {
         // TODO オブジェクト数だけ毎フレームにLuaを読んでいるが直したほうがいいのでは
-        call_lua(l, drawing_data_list[i], i);
+        call_lua(l, drawing_data_list[i]);
     }
 }
 
