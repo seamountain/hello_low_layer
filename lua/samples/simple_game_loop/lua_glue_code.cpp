@@ -2,56 +2,49 @@
 #include <ncurses.h>
 #include "libs/lua-5.2.3/include/lua.hpp"
 
-// TODO C++側に対象のDataを残す or userdataで引き継ぐか
-Data** target_data;
+Data* target_data;
 
 int update_target_data(lua_State *l) {
-//    Data* d = *(Data**)lua_touserdata(l, 1);
+    Data* d = *(Data**)lua_touserdata(l, 1);
     int x = (int)lua_tonumber(l, -3);
     int y = (int)lua_tonumber(l, -2);
     int direction = (int)lua_tonumber(l, -1);
-
-    (*target_data)->update(x, y, direction);
-
+    d->update(x, y, direction);
     return 0;
 }
 
 int lua_get_x(lua_State *l) {
-    Data** d = target_data;
-    int x = (*target_data)->getX();
+    Data* d = *(Data**)lua_touserdata(l, 1);
+    int x = d->getX();
     lua_pushnumber(l, x);
     return 1;
 }
 
 int lua_get_y(lua_State *l) {
-//    Data* d = *(Data**)lua_touserdata(l, 1);
-    Data** d = target_data;
-    int y = (*target_data)->getY();
+    Data* d = *(Data**)lua_touserdata(l, 1);
+    int y = d->getY();
     lua_pushnumber(l, y);
     return 1;
 }
 
 int lua_get_width(lua_State *l) {
-//    Data* d = *(Data**)lua_touserdata(l, 1);
-    Data** d = target_data;
-    int w = (*target_data)->getWidth();
+    Data* d = *(Data**)lua_touserdata(l, 1);
+    int w = d->getWidth();
     lua_pushnumber(l, w);
     return 1;
 }
 
 int lua_get_height(lua_State *l) {
-//    Data* d = *(Data**)lua_touserdata(l, 1);
-    Data** d = target_data;
-    int h = (*target_data)->getHeight();
+    Data* d = *(Data**)lua_touserdata(l, 1);
+    int h = d->getHeight();
     lua_pushnumber(l, h);
     return 1;
 }
 
 int lua_get_direction(lua_State *l) {
-//    Data* d = *(Data**)lua_touserdata(l, 1);
-//    Data** d = target_data;
-    int d = (*target_data)->getDirection();
-    lua_pushnumber(l, d);
+    Data* d = *(Data**)lua_touserdata(l, 1);
+    int direction = d->getDirection();
+    lua_pushnumber(l, direction);
     return 1;
 }
 
@@ -80,8 +73,10 @@ void data_function_init(lua_State *l) {
 }
 
 int get_target_data(lua_State *l) {
-//    Data** d = (Data**)lua_touserdata(l, 1);
     data_function_init(l);
+
+    Data** d = (Data**)lua_touserdata(l, 1);
+    *d = target_data;
 
     return 1;
 }
