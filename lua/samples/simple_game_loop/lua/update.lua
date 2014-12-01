@@ -9,13 +9,13 @@
 function move_data_pos(screen_width, screen_height)
     -- direction: 0 left 1 top 2 right 3 buttom
 
-    local data = get_target_data();
+    local data = get_target_data()
 
-    local x = data:get_x();
-    local y = data:get_y();
-    local width = data:get_width();
-    local height = data:get_height();
-    local direction = data:get_direction();
+    local x = data:get_x()
+    local y = data:get_y()
+    local width = data:get_width()
+    local height = data:get_height()
+    local direction = data:get_direction()
 
     if x <= 0 then
         direction = 2
@@ -39,5 +39,5 @@ function move_data_pos(screen_width, screen_height)
     end
 
 --    print("lua after x " .. x .. " y " .. y .. " direction " .. direction)
-    data:update(x, y, direction);
+    data:update(x, y, direction)
 end
