@@ -1,12 +1,16 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include <deque>
 #include "libs/SDL2-2.0.3/include/SDL.h"
 #include "libs/lua-5.2.3/include/lua.hpp"
-#include "Data.h"
-#include "lua_glue_code.cpp"
 
 using namespace std;
+
+#include "Data.h"
+#include "main.h"
+#include "lua_glue_code.cpp"
+
 
 int TARGET_FPS = 60;
 // milli seconds per frame
@@ -30,7 +34,9 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
-vector<Data*> drawing_data_list;
+deque<Data*> drawing_data_list;
+
+int current_data_index;
 
 void call_lua(lua_State *l, Data* data) {
     target_data = data;
@@ -53,6 +59,7 @@ void Update(lua_State *l) {
     }
 
     for (int i = 0; i < drawing_data_list.size(); i++) {
+        current_data_index = i;
         // TODO オブジェクト数だけ毎フレームにLuaを読んでいるが直したほうがいいのでは
         call_lua(l, drawing_data_list[i]);
     }
@@ -63,6 +70,15 @@ void register_drawing_data(int x, int y) {
     Color* color = new Color(current_palette);
     Data* data = new Data(x, y, brash_size, brash_size, color);
     drawing_data_list.push_back(data);
+}
+
+void register_data_from_lua(Data* d) {
+    drawing_data_list.push_front(d);
+}
+
+void remove_data_from_lua(Data* d) {
+    drawing_data_list.push_front(d);
+    drawing_data_list.erase(drawing_data_list.begin() + current_data_index);
 }
 
 void init_palette_button() {
@@ -144,6 +160,7 @@ bool init(lua_State *l) {
     init_palette_button();
 
     lua_register(l, "get_target_data", get_target_data);
+    lua_register(l, "Data", data_init);
 
     return true;
 }

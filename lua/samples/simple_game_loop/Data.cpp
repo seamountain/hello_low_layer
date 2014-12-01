@@ -10,6 +10,16 @@ Data::Data(int x, int y, int width, int height, Color* color) {
     this->direction = rand() % 4;
 }
 
+Data::Data(int x, int y, int width, int height, Color* color, int direction) {
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+    this->color = color;
+
+    this->direction = direction;
+}
+
 int Data::getX() {
     return this->x;
 }
@@ -41,6 +51,11 @@ void Data::setDirection(int d) {
 void Data::setPos(int x, int y) {
     this->x = x;
     this->y = y;
+}
+
+void Data::setSize(int w, int h) {
+    this->width = w;
+    this->height = h;
 }
 
 void Data::update(int x, int y, int direction) {

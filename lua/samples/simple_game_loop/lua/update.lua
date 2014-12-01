@@ -17,17 +17,21 @@ function move_data_pos(screen_width, screen_height)
     local height = data:get_height()
     local direction = data:get_direction()
 
-    if x <= 0 then
-        direction = 2
-    elseif screen_width - width < x then
+    local is_attacked = true
+
+    if screen_width - width < x then
         direction = 0
-    elseif y < 0 then
-        direction = 3
+    elseif x <= 0 then
+        direction = 2
     elseif screen_height - height < y then
         direction = 1
+    elseif y <= 0 then
+        direction = 3
+    else
+        is_attacked = false
     end
 
-    local speed = 5 * (width * height) / 100
+    local speed = (width * height) / 2
     if direction == 0 then
         x = x - speed
     elseif direction == 1 then
@@ -36,6 +40,17 @@ function move_data_pos(screen_width, screen_height)
         x = x + speed
     elseif direction == 3 then
         y = y + speed
+    end
+
+    if is_attacked then
+      width = width * 0.9
+      height = height * 0.9
+      -- TODO delete too small data
+
+      data:set_size(width, height)
+
+      local slide_rate = math.random(890, 950) / 1000
+      local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
     end
 
 --    print("lua after x " .. x .. " y " .. y .. " direction " .. direction)
