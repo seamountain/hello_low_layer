@@ -8,14 +8,11 @@
 
 function move_data_pos(screen_width, screen_height)
     -- direction: 0 left 1 top 2 right 3 buttom
-
-    local data = get_target_data()
-
-    local x = data:get_x()
-    local y = data:get_y()
-    local width = data:get_width()
-    local height = data:get_height()
-    local direction = data:get_direction()
+    local x = get_x()
+    local y = get_y()
+    local width = get_width()
+    local height = get_height()
+    local direction = get_direction()
 
     local is_attacked = true
 
@@ -47,12 +44,12 @@ function move_data_pos(screen_width, screen_height)
       height = height * 0.9
       -- TODO delete too small data
 
-      data:set_size(width, height)
+      set_size(width, height)
 
       local slide_rate = math.random(890, 950) / 1000
       local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
     end
 
 --    print("lua after x " .. x .. " y " .. y .. " direction " .. direction)
-    data:update(x, y, direction)
+    update_data(x, y, direction)
 end

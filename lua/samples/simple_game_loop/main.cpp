@@ -131,6 +131,19 @@ void Draw() {
     SDL_RenderPresent(render);
 }
 
+bool init_functions(lua_State *l) {
+    lua_register(l, "Data", data_init);
+
+    lua_register(l, "update_data", update_data);
+    lua_register(l, "set_size", set_size);
+    lua_register(l, "get_x", get_x);
+    lua_register(l, "get_y", get_y);
+    lua_register(l, "get_width", get_width);
+    lua_register(l, "get_height", get_height);
+    lua_register(l, "get_direction", get_direction);
+    lua_register(l, "delete_data", delete_data);
+}
+
 // REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
 bool init(lua_State *l) {
     // TODO fix path
@@ -159,8 +172,7 @@ bool init(lua_State *l) {
 
     init_palette_button();
 
-    lua_register(l, "get_target_data", get_target_data);
-    lua_register(l, "Data", data_init);
+    init_functions(l);
 
     return true;
 }
