@@ -1,36 +1,30 @@
-sample_print: print run
-
-sample_dostring: dostring run
-
-sample_dofile: dofile run
-
-sample_call_c_func: call_c_func run
-
-sample_input_calc: input_calc run
-
-sample_game_loop: game_loop run
+.PHONY: print dostring dofile call_c_func lua_cpp_bridge game_loop clean
 
 # http://stackoverflow.com/questions/8024498/compile-embedded-lua-in-c
 print:
-	g++ print.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+	g++ lua_print/print.cpp -o print.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua
+	./print.out
 
-dostring: dostring.cpp
-	g++ dostring.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+dostring:
+	g++ dostring/dostring.cpp -o dostring.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua
+	./dostring.out
 
-dofile: dofile.cpp
-	g++ dofile.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+dofile:
+	g++ dofile/dofile.cpp -o dofile.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua
+	./dofile.out
 
-call_c_func: call_c_func.cpp
-	g++ call_c_func.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+call_c_func:
+	g++ call_c_func/call_c_func.cpp -o call_c_func.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua
+	./call_c_func.out
 
-input_calc: input.cpp
-	g++ input.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua
+lua_cpp_bridge:
+	g++ lua_cpp_bridge/input.cpp -o input.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua
+	./input.out
 
-game_loop: game_loop.cpp
-	g++ game_loop.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua -g `sdl2-config --cflags --libs`
-
-run:
-	./result.out
+game_loop:
+	g++ game_loop/game_loop.cpp -o game_loop.out -I./libs/lua-5.2.3/include -L./libs/lua-5.2.3/lib -llua -g `sdl2-config --cflags --libs`
+	./game_loop.out
 
 clean:
+	rm -r *.dSYM
 	rm *.out
