@@ -34,8 +34,6 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
-deque<Data*> drawing_data_list;
-
 int current_data_index;
 
 void call_lua(lua_State *l, Data* data) {
@@ -131,7 +129,7 @@ void Draw() {
     SDL_RenderPresent(render);
 }
 
-bool init_functions(lua_State *l) {
+void init_functions(lua_State *l) {
     lua_register(l, "Data", data_init);
 
     lua_register(l, "update_data", update_data);
@@ -142,6 +140,7 @@ bool init_functions(lua_State *l) {
     lua_register(l, "get_height", get_height);
     lua_register(l, "get_direction", get_direction);
     lua_register(l, "delete_data", delete_data);
+    lua_register(l, "get_hit_data", get_hit_data);
 }
 
 // REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
