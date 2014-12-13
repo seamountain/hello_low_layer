@@ -1,0 +1,3 @@
+[submodule "lua/samples/libs/luaunit"]
+	path = lua/samples/libs/luaunit
+	url = git@github.com:bluebird75/luaunit.git
