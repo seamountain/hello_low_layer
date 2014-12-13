@@ -16,6 +16,7 @@ int TARGET_FPS = 60;
 // milli seconds per frame
 int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
 
+lua_State* l;
 SDL_Window* w;
 SDL_Renderer* render;
 SDL_GLContext context;
@@ -36,7 +37,7 @@ vector<SDL_Rect*> palette_buttons_rect;
 
 int current_data_index;
 
-void call_lua(lua_State *l, Data* data) {
+void call_lua(Data* data) {
     target_data = data;
 
     lua_getglobal(l, "move_data_pos");
@@ -48,7 +49,7 @@ void call_lua(lua_State *l, Data* data) {
     }
 }
 
-void Update(lua_State *l) {
+void Update() {
     // http://www.c-lang.net/clock
     if (frame_count == TARGET_FPS) {
         frame_count = 0;
@@ -59,7 +60,7 @@ void Update(lua_State *l) {
     for (int i = 0; i < drawing_data_list.size(); i++) {
         current_data_index = i;
         // TODO オブジェクト数だけ毎フレームにLuaを読んでいるが直したほうがいいのでは
-        call_lua(l, drawing_data_list[i]);
+        call_lua(drawing_data_list[i]);
     }
 }
 
@@ -129,7 +130,7 @@ void Draw() {
     SDL_RenderPresent(render);
 }
 
-void init_functions(lua_State *l) {
+void init_functions() {
     lua_register(l, "Data", data_init);
 
     lua_register(l, "update_data", update_data);
@@ -144,7 +145,7 @@ void init_functions(lua_State *l) {
 }
 
 // REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
-bool init(lua_State *l) {
+bool init() {
     // TODO fix path
     string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/";
 
@@ -171,7 +172,7 @@ bool init(lua_State *l) {
 
     init_palette_button();
 
-    init_functions(l);
+    init_functions();
 
     return true;
 }
@@ -239,10 +240,10 @@ bool dealloc() {
 
 int main(int argc, char* argv[])
 {
-    lua_State *l = luaL_newstate();
+    l = luaL_newstate();
     luaL_openlibs(l);
 
-    if (!init(l)) {
+    if (!init()) {
         return 1;
     };
 
@@ -256,7 +257,7 @@ int main(int argc, char* argv[])
         clock_t begin = clock();
 
         // GameLoop
-        Update(l);
+        Update();
         Draw();
 
         // wait
