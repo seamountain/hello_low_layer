@@ -9,6 +9,11 @@
 screen_width = 0
 screen_height = 0
 
+function set_screen_size(sw, sh)
+  screen_width = sw
+  screen_height = sh
+end
+
 function move_data_pos(sw, sh)
     -- direction: 0 left 1 top 2 right 3 buttom
     screen_width = sw
@@ -32,45 +37,44 @@ function move_data_pos(sw, sh)
     update_data(x, y, direction)
 end
 
-function move(x, y, width, height, direction)
-    local is_attacked = true
+function move(d)
+  --local is_attacked = true
 
-    if screen_width - width < x then
-        direction = 0
-    elseif x <= 0 then
-        direction = 2
-    elseif screen_height - height < y then
-        direction = 1
-    elseif y <= 0 then
-        direction = 3
-    else
-        is_attacked = false
-    end
+  if screen_width - d.w < d.x then
+    d.d = 0
+  elseif d.x <= 0 then
+    d.d = 2
+  elseif screen_height - d.h < d.y then
+    d.d = 1
+  elseif d.y <= 0 then
+    d.d = 3
+  else
+    --is_attacked = false
+  end
 
-    local speed = (width * height) / 8
-    if direction == 0 then
-        x = x - speed
-    elseif direction == 1 then
-        y = y - speed
-    elseif direction == 2 then
-        x = x + speed
-    elseif direction == 3 then
-        y = y + speed
-    end
+  local speed = (d.w * d.h) / 8
+  if d.d == 0 then
+    d.x = d.x - speed
+  elseif d.d == 1 then
+    d.y = d.y - speed
+  elseif d.d == 2 then
+    d.x = d.x + speed
+  elseif d.d == 3 then
+    d.y = d.y + speed
+  end
 
-    -- TODO 固まるのを直す
-    --if is_attacked then
-      --width = width * 0.9
-      --height = height * 0.9
-      ---- TODO delete too small data
+  -- TODO 固まるのを直す
+  --if is_attacked then
+  --width = width * 0.9
+  --height = height * 0.9
+  ---- TODO delete too small data
 
-      --set_size(width, height)
+  --set_size(width, height)
 
-      --local slide_rate = math.random(890, 950) / 1000
-      --local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
-    --end
+  --local slide_rate = math.random(890, 950) / 1000
+  --local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
+  --end
 
-    return x, y, direction
 end
 
 function move_with_hit_data(d)
@@ -85,15 +89,13 @@ function move_with_hit_data(d)
 end
 
 function turn_opposite_direction(d)
-  if d == 0 then
-    d = 2
-  elseif d == 1 then
-    d = 3
-  elseif d == 2 then
-    d = 0
-  elseif d == 3 then
-    d = 1
+  if d.d == 0 then
+    d.d = 2
+  elseif d.d == 1 then
+    d.d = 3
+  elseif d.d == 2 then
+    d.d = 0
+  elseif d.d == 3 then
+    d.d = 1
   end
-
-  return d
 end

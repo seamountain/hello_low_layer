@@ -8,9 +8,6 @@
 using namespace std;
 
 #include "Data.h"
-#include "main.h"
-#include "lua_glue_code.cpp"
-
 
 int TARGET_FPS = 60;
 // milli seconds per frame
@@ -35,20 +32,6 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
-int current_data_index;
-
-void call_lua(Data* data) {
-    target_data = data;
-
-    lua_getglobal(l, "move_data_pos");
-    lua_pushnumber(l, SCREEN_WIDTH);
-    lua_pushnumber(l, SCREEN_HEIGHT);
-
-    if (lua_pcall(l, 2, 0, 0)) {
-        printf("call_lua error: %s\n", lua_tostring(l, -1));
-    }
-}
-
 void Update() {
     // http://www.c-lang.net/clock
     if (frame_count == TARGET_FPS) {
@@ -57,27 +40,23 @@ void Update() {
         frame_count++;
     }
 
-    for (int i = 0; i < drawing_data_list.size(); i++) {
-        current_data_index = i;
-        // TODO オブジェクト数だけ毎フレームにLuaを読んでいるが直したほうがいいのでは
-        call_lua(drawing_data_list[i]);
+    lua_getglobal(l, "move_data");
+
+    if (lua_pcall(l, 0, 0, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
+
 }
 
 void register_drawing_data(int x, int y) {
-    int brash_size = 10;
-    Color* color = new Color(current_palette);
-    Data* data = new Data(x, y, brash_size, brash_size, color);
-    drawing_data_list.push_back(data);
-}
+    lua_getglobal(l, "register_data");
+    lua_pushnumber(l, x);
+    lua_pushnumber(l, y);
+    lua_pushnumber(l, (int)current_palette);
 
-void register_data_from_lua(Data* d) {
-    drawing_data_list.push_front(d);
-}
-
-void remove_data_from_lua(Data* d) {
-    drawing_data_list.push_front(d);
-    drawing_data_list.erase(drawing_data_list.begin() + current_data_index);
+    if (lua_pcall(l, 3, 0, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
+    }
 }
 
 void init_palette_button() {
@@ -109,51 +88,78 @@ void Draw() {
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
     SDL_RenderClear(render);
 
-    int data_size = drawing_data_list.size();
-    for (int i = 0; i < data_size; i++) {
-        SDL_Rect* r = new SDL_Rect();
-        r->x = drawing_data_list[i]->getX();
-        r->y = drawing_data_list[i]->getY();
-        r->w = drawing_data_list[i]->getWidth();
-        r->h = drawing_data_list[i]->getHeight();
-
-//        printf("i: %i,  x %i, y %i, w %i, h %i\n", i, r->x, r->y, r->w, r->h);
-
-        Color* color = drawing_data_list[i]->getColor();
-        SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
-        // TODO use RenderFillRects with same color rects
-        SDL_RenderFillRect(render, r);
+    lua_getglobal(l, "data_num");
+    if (lua_pcall(l, 0, 1, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
+    int data_num = (int) lua_tonumber(l, -1);
+
+    if (data_num != 0) {
+        lua_getglobal(l, "data_list");
+        lua_pushnil(l);
+        while (lua_next(l, -2) != 0) {
+            lua_pushnil(l);
+            SDL_Rect *r = new SDL_Rect();
+            while (lua_next(l, -2) != 0) {
+//            printf("%s %s\n", lua_tostring(l, -2), lua_tostring(l, -1));
+                string key = lua_tostring(l, -2);
+                if (key == "x") {
+                    r->x = (int) lua_tointeger(l, -1);
+                } else if (key == "y") {
+                    r->y = (int) lua_tointeger(l, -1);
+                } else if (key == "w") {
+                    r->w = (int) lua_tointeger(l, -1);
+                } else if (key == "h") {
+                    r->h = (int) lua_tointeger(l, -1);
+                } else if (key == "color_id") {
+                    int colorId = (int) lua_tointeger(l, -1);
+                    Color *color = new Color((Palette) colorId);
+                    SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
+                }
+                lua_pop(l, 1);
+            }
+            SDL_RenderFillRect(render, r);
+            lua_pop(l, 1);
+        }
+    }
+    lua_settop(l, 0);
 
     draw_palette_button();
 
     SDL_RenderPresent(render);
 }
 
-void init_functions() {
-    lua_register(l, "Data", data_init);
-
-    lua_register(l, "update_data", update_data);
-    lua_register(l, "set_size", set_size);
-    lua_register(l, "get_x", get_x);
-    lua_register(l, "get_y", get_y);
-    lua_register(l, "get_width", get_width);
-    lua_register(l, "get_height", get_height);
-    lua_register(l, "get_direction", get_direction);
-    lua_register(l, "delete_data", delete_data);
-    lua_register(l, "get_hit_data", get_hit_data);
-}
-
-// REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
-bool init() {
+void lua_init() {
     // TODO fix path
     string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/";
 
     string updateScript = path + "lua/update.lua";
     if (luaL_dofile(l, updateScript.c_str())) {
         printf("error 1: %s\n", lua_tostring(l, -1));
-        return false;
     }
+
+    string dataScript = path + "lua/data.lua";
+    if (luaL_dofile(l, dataScript.c_str())) {
+        printf("error 1: %s\n", lua_tostring(l, -1));
+    }
+
+    string dataManagerScript = path + "lua/data_manager.lua";
+    if (luaL_dofile(l, dataManagerScript.c_str())) {
+        printf("error 1: %s\n", lua_tostring(l, -1));
+    }
+
+    lua_getglobal(l, "set_screen_size");
+    lua_pushnumber(l, SCREEN_WIDTH);
+    lua_pushnumber(l, SCREEN_HEIGHT);
+    if (lua_pcall(l, 2, 0, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
+    }
+    lua_pop(l, 1);
+}
+
+// REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
+bool init() {
+    lua_init();
 
     // initialize SDL
     if( SDL_Init(SDL_INIT_VIDEO) < 0 ) return false;
@@ -171,8 +177,6 @@ bool init() {
     render = SDL_CreateRenderer(w, -1, 0);
 
     init_palette_button();
-
-    init_functions();
 
     return true;
 }
