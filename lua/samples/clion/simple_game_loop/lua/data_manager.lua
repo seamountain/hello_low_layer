@@ -3,7 +3,7 @@ function register_data(x, y, color_id)
   local w = 10
   local h = 10
   local dir = math.random(0, 3)
-  local d = PointData.new(x, y, color_id, w, h, dir)
+  local d = Data.new(x, y, color_id, w, h, dir)
   table.insert(data_list, d)
 end
 

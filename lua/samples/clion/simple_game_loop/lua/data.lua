@@ -1,5 +1,5 @@
-PointData = {}
-PointData.new = function (x, y, color_id, w, h, d)
+Data = {}
+Data.new = function (x, y, color_id, w, h, d)
   local obj = {}
   obj.x = x
   obj.y = y

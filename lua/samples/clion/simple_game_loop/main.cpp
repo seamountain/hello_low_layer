@@ -4,10 +4,9 @@
 #include <deque>
 #include "libs/SDL2-2.0.3/include/SDL.h"
 #include "libs/lua-5.2.3/include/lua.hpp"
+#include "Color.h"
 
 using namespace std;
-
-#include "Data.h"
 
 int TARGET_FPS = 60;
 // milli seconds per frame
