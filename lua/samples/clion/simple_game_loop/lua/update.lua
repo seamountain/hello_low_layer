@@ -14,29 +14,6 @@ function set_screen_size(sw, sh)
   screen_height = sh
 end
 
-function move_data_pos(sw, sh)
-    -- direction: 0 left 1 top 2 right 3 buttom
-    screen_width = sw
-    screen_height = sh
-
-    local x = get_x()
-    local y = get_y()
-    local width = get_width()
-    local height = get_height()
-    local direction = get_direction()
-
-    local hit_data = get_hit_data()
-
-    if hit_data ~= nil then
-      move_with_hit_data(hit_data)
-      direction = turn_opposite_direction(direction)
-    end
-    x, y, direction = move(x, y, width, height, direction)
-
---    print("lua after x " .. x .. " y " .. y .. " direction " .. direction)
-    update_data(x, y, direction)
-end
-
 function move(d)
   --local is_attacked = true
 
@@ -75,17 +52,6 @@ function move(d)
   --local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
   --end
 
-end
-
-function move_with_hit_data(d)
-  local x2 = d:get_x()
-  local y2 = d:get_y()
-  local w2 = d:get_width()
-  local h2 = d:get_height()
-  local d2 = turn_opposite_direction(d:get_direction())
-  x2, y2, d2 = move(x2, y2, w2, h2, d2)
-
-  d:update(x2, y2, d2)
 end
 
 function turn_opposite_direction(d)
