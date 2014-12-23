@@ -35,8 +35,22 @@ end
 
 function move_data()
   for i = 1, #data_list, 1 do
-    local d = data_list[i]
-    move(d)
-    hit_another_data(d)
+    move(data_list[i])
   end
+end
+
+function split_data(d)
+  -- TODO delete too small data
+  local shaved_rate = 0.9
+  d.w = d.w * shaved_rate
+  d.h = d.h * shaved_rate
+
+  if d.w <= 1 or d.h <= 1 then
+    table.delete(data_list, d)
+    return;
+  end
+
+  local slide_rate = math.random(890, 950) / 1000
+  local splited_data = Data.new(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d)
+  table.insert(data_list, splited_data)
 end

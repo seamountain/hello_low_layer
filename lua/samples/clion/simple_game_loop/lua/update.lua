@@ -15,7 +15,7 @@ function set_screen_size(sw, sh)
 end
 
 function move(d)
-  --local is_attacked = true
+  local is_attacked = true
 
   if screen_width - d.w < d.x then
     d.d = 0
@@ -26,7 +26,7 @@ function move(d)
   elseif d.y <= 0 then
     d.d = 3
   else
-    --is_attacked = false
+    is_attacked = false
   end
 
   local speed = (d.w * d.h) / 8
@@ -40,17 +40,11 @@ function move(d)
     d.y = d.y + speed
   end
 
-  -- TODO 固まるのを直す
-  --if is_attacked then
-  --width = width * 0.9
-  --height = height * 0.9
-  ---- TODO delete too small data
+  if is_attacked then
+    --split_data(d)
+  end
 
-  --set_size(width, height)
-
-  --local slide_rate = math.random(890, 950) / 1000
-  --local new_data = Data(x * slide_rate, y * slide_rate, width, height, direction)
-  --end
+  hit_another_data(d)
 
 end
 
