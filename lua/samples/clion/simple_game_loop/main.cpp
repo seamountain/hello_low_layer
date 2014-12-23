@@ -45,6 +45,8 @@ void Update() {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
 
+    // TODO Add debug mode
+//    printf("Update gettop %i\n", lua_gettop(l));
 }
 
 void register_drawing_data(int x, int y) {
@@ -126,6 +128,8 @@ void Draw() {
     draw_palette_button();
 
     SDL_RenderPresent(render);
+
+//    printf("Render gettop %i\n", lua_gettop(l));
 }
 
 void lua_init() {

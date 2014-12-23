@@ -14,7 +14,12 @@ function set_screen_size(sw, sh)
   screen_height = sh
 end
 
-function move(d)
+function move(index)
+  local d = data_list[index]
+
+  if d == nil then
+    return
+  end
   local is_attacked = true
 
   if screen_width - d.w < d.x then
@@ -41,11 +46,8 @@ function move(d)
   end
 
   if is_attacked then
-    --split_data(d)
+    split_data(index)
   end
-
-  hit_another_data(d)
-
 end
 
 function turn_opposite_direction(d)

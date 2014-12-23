@@ -11,8 +11,10 @@ function data_num()
   return #data_list
 end
 
-function hit_another_data(d)
-  for i = 1, #data_list, 1 do
+function hit_another_data(index)
+  local d = data_list[index]
+  local list_size = #data_list
+  for i = 1, list_size do
     local target = data_list[i]
     if target ~= d then
       local x1 = d.x
@@ -34,21 +36,28 @@ function hit_another_data(d)
 end
 
 function move_data()
-  for i = 1, #data_list, 1 do
-    move(data_list[i])
+  local list_size = #data_list
+  for i = 1, list_size do
+    if data_list[i] == nil then
+      return
+    end
+
+    move(i)
+    hit_another_data(i)
   end
 end
 
-function split_data(d)
-  -- TODO delete too small data
+function split_data(index)
+  local d = data_list[index]
   local shaved_rate = 0.9
   d.w = d.w * shaved_rate
   d.h = d.h * shaved_rate
 
-  if d.w <= 1 or d.h <= 1 then
-    table.delete(data_list, d)
-    return;
-  end
+  -- TODO Remove small data
+  --if d.w <= 1 or d.h <= 1 then
+    --table.remove(data_list, index)
+    --return
+  --end
 
   local slide_rate = math.random(890, 950) / 1000
   local splited_data = Data.new(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d)
