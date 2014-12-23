@@ -272,12 +272,15 @@ int main(int argc, char* argv[])
 
         // spent milli seconds
         double diff = (double)(end - begin) / CLOCKS_PER_SEC * 1000;
+        int wait_time = (TARGET_FRAME_TIME - diff - 1);
 
         // wait
-        usleep(TARGET_FRAME_TIME - diff - 1);
-        // advanced: wait strictly by switching
-        while (TARGET_FRAME_TIME >= ((double)(clock() - begin) / CLOCKS_PER_SEC * 1000)) {
-            usleep(0);
+        if (0 < wait_time) {
+            usleep((useconds_t)wait_time);
+            // advanced: wait strictly by switching
+            while (TARGET_FRAME_TIME >= ((double)(clock() - begin) / CLOCKS_PER_SEC * 1000)) {
+                usleep(0);
+            }
         }
     }
 
