@@ -17,9 +17,11 @@ end
 function move(index)
   local d = data_list[index]
 
-  if d == nil then
-    return
+  -- TODO Fix removed data list index
+  if data_list[index] == nil then
+    return 0
   end
+
   local is_attacked = true
 
   if screen_width - d.w < d.x then
@@ -46,8 +48,14 @@ function move(index)
   end
 
   if is_attacked then
-    split_data(index)
+    local removed_num = 0
+    if split_data(index) then
+      removed_num = 1
+    end
+    return removed_num
   end
+
+  return 0
 end
 
 function turn_opposite_direction(d)

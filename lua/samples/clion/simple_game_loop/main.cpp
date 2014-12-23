@@ -271,6 +271,8 @@ int main(int argc, char* argv[])
         // wait
         clock_t end = clock();
 
+        // TODO Display fps
+
         // spent milli seconds
         double diff = (double)(end - begin) / CLOCKS_PER_SEC * 1000;
         int wait_time = (TARGET_FRAME_TIME - diff - 1);
