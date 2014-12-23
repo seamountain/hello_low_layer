@@ -119,6 +119,7 @@ void Draw() {
                 }
                 lua_pop(l, 1);
             }
+            // TODO Use RenderFillRects
             SDL_RenderFillRect(render, r);
             lua_pop(l, 1);
         }
