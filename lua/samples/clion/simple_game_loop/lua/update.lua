@@ -14,8 +14,13 @@ function set_screen_size(sw, sh)
   screen_height = sh
 end
 
-function move(index)
+function move(index, list_size)
   local d = data_list[index]
+
+  -- debug
+  if data_list[index] == nil then
+    print("move() index " .. index .. " #data_list " .. #data_list .. " list_size " .. list_size)
+  end
 
   -- TODO Fix removed data list index
   if data_list[index] == nil then
@@ -48,11 +53,7 @@ function move(index)
   end
 
   if is_attacked then
-    local removed_num = 0
-    if split_data(index) then
-      removed_num = 1
-    end
-    return removed_num
+    return split_data(index)
   end
 
   return 0
