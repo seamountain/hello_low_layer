@@ -40,19 +40,16 @@ end
 -- TODO data_list size test afte removing
 function move_data()
   local list_size = #data_list
-  for i = 1, list_size do
+  local i = 1
+  while i <= list_size do
     local changed_num = move(i, list_size)
-    hit_another_data(i)
 
-    if changed_num < 0 then
-      i = i + changed_num
+    -- increment just at not removed situation
+    if 0 <= changed_num then
+      hit_another_data(i)
+      i = i + 1
     end
     list_size = list_size + changed_num
-
-    -- debug
-    if list_size <= i then
-      print("i " .. i .. " list_size " .. list_size)
-    end
   end
 end
 

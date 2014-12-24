@@ -17,11 +17,6 @@ end
 function move(index, list_size)
   local d = data_list[index]
 
-  -- debug
-  if data_list[index] == nil then
-    print("move() index " .. index .. " #data_list " .. #data_list .. " list_size " .. list_size)
-  end
-
   -- TODO Fix removed data list index
   if data_list[index] == nil then
     return 0
