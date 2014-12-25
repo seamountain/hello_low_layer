@@ -13,7 +13,7 @@ function TestUpdate:test_turn_opposit_direction()
   local right = 2
   local buttom = 3
 
-  d = PointData.new(0, 0, 0, 0, 0, left)
+  d = Data.new(0, 0, 0, 0, 0, left)
   turn_opposite_direction(d)
   assertEquals(d.d, right)
 
