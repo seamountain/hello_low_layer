@@ -16,8 +16,11 @@ lua_State* l;
 SDL_Window* w;
 SDL_Renderer* render;
 SDL_GLContext context;
+SDL_Texture *texture;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
+
+const int ASCII_CODE_ZERO = 48;
 
 int frame_count = 0;
 
@@ -60,6 +63,21 @@ void register_drawing_data(int x, int y) {
     }
 }
 
+void init_num_texture() {
+  SDL_Surface *bmp = SDL_LoadBMP("./images/font.bmp");
+  if (!bmp) {
+    printf("bmp is null. Error: %s\n", SDL_GetError());
+    return;
+  }
+
+  texture = SDL_CreateTextureFromSurface(render, bmp);
+
+  SDL_FreeSurface(bmp);
+  if (texture == nullptr){
+    std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+  }
+}
+
 void init_palette_button() {
     int margin = 10;
     int width = 50;
@@ -82,6 +100,30 @@ void draw_palette_button() {
 
         SDL_RenderFillRect(render, palette_buttons_rect[i]);
     }
+}
+
+// REFER TO http://www5.big.or.jp/~high/VENIO/kuz/kuz_are_14.htm
+void draw_num_label(int num) {
+  string label = to_string(num);
+  SDL_Rect src,drw;
+  int text_size = 32;
+  int margin = 10;
+
+  src.y = 0;
+  src.w = text_size;
+  src.h = text_size;
+  drw.w = text_size;
+  drw.h = text_size;
+  int i = 0;
+  while (i < label.length()) {
+    src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
+    drw.x = margin + i * text_size;
+    drw.y = SCREEN_HEIGHT - text_size;
+
+    SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
+
+    i++;
+  }
 }
 
 void Draw() {
@@ -127,6 +169,7 @@ void Draw() {
     lua_settop(l, 0);
 
     draw_palette_button();
+    draw_num_label(data_num);
 
     SDL_RenderPresent(render);
 
@@ -181,6 +224,8 @@ bool init() {
     render = SDL_CreateRenderer(w, -1, 0);
 
     init_palette_button();
+
+    init_num_texture();
 
     return true;
 }
