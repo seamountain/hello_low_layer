@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(simple_game_loop)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 # g++ game_loop.cpp -o result.out -I./lua-5.2.3/include -L./lua-5.2.3/lib -llua -g `sdl2-config --cflags` `sdl2-config --libs`
 
 include_directories("libs/lua-5.2.3/include" "libs/SDL2-2.0.3/include")
