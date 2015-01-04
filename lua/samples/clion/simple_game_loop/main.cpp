@@ -122,7 +122,7 @@ void draw_num_label(int num) {
   while (i < label.length()) {
     src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
     drw.x = margin + i * text_size;
-    drw.y = SCREEN_HEIGHT - text_size;
+    drw.y = SCREEN_HEIGHT - (text_size + margin);
 
     SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
 
