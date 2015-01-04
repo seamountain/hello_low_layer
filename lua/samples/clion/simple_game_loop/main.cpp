@@ -8,6 +8,9 @@
 
 using namespace std;
 
+// TODO fix path
+string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/";
+
 int TARGET_FPS = 60;
 // milli seconds per frame
 int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
@@ -64,7 +67,8 @@ void register_drawing_data(int x, int y) {
 }
 
 void init_num_texture() {
-  SDL_Surface *bmp = SDL_LoadBMP("./images/font.bmp");
+    string image_path = path + "images/font.bmp";
+    SDL_Surface *bmp = SDL_LoadBMP(image_path.c_str());
   if (!bmp) {
     printf("bmp is null. Error: %s\n", SDL_GetError());
     return;
@@ -177,9 +181,6 @@ void Draw() {
 }
 
 void lua_init() {
-    // TODO fix path
-    string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/";
-
     string updateScript = path + "lua/update.lua";
     if (luaL_dofile(l, updateScript.c_str())) {
         printf("error 1: %s\n", lua_tostring(l, -1));
