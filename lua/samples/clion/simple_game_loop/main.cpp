@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
-#include <deque>
+#include <map>
 #include "libs/SDL2-2.0.3/include/SDL.h"
 #include "libs/lua-5.2.3/include/lua.hpp"
 #include "Color.h"
@@ -141,14 +141,15 @@ void Draw() {
     }
     int data_num = (int) lua_tonumber(l, -1);
 
+    map<int, vector<SDL_Rect *>> data_list;
     if (data_num != 0) {
         lua_getglobal(l, "data_list");
         lua_pushnil(l);
         while (lua_next(l, -2) != 0) {
+            int colorId;
             lua_pushnil(l);
             SDL_Rect *r = new SDL_Rect();
             while (lua_next(l, -2) != 0) {
-//            printf("%s %s\n", lua_tostring(l, -2), lua_tostring(l, -1));
                 string key = lua_tostring(l, -2);
                 if (key == "x") {
                     r->x = (int) lua_tointeger(l, -1);
@@ -159,25 +160,41 @@ void Draw() {
                 } else if (key == "h") {
                     r->h = (int) lua_tointeger(l, -1);
                 } else if (key == "color_id") {
-                    int colorId = (int) lua_tointeger(l, -1);
-                    Color *color = new Color((Palette) colorId);
-                    SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
+                    colorId = (int) lua_tointeger(l, -1);
                 }
                 lua_pop(l, 1);
             }
-            // TODO Use RenderFillRects
-            SDL_RenderFillRect(render, r);
+            data_list[colorId].push_back(r);
             lua_pop(l, 1);
         }
     }
     lua_settop(l, 0);
 
+    if (data_list.size() != 0) {
+        for (int i = 0; i < palettes.size(); i++) {
+            Color *color = new Color(*palettes[i]);
+            SDL_SetRenderDrawColor(render, color->r, color->g, color->b, color->a);
+            delete color;
+
+            vector<SDL_Rect *> rects = data_list[i];
+            if (rects.size() != 0) {
+                SDL_Rect* rects_arr = new SDL_Rect[rects.size()];
+                for (int j = 0; j < rects.size(); j++) {
+                    rects_arr[j] = *rects[j];
+                }
+
+                if (SDL_RenderFillRects(render, rects_arr, rects.size()) < 0) {
+                    printf("%s\n", SDL_GetError());
+                }
+                delete [] rects_arr;
+            }
+        }
+    }
+
     draw_palette_button();
     draw_num_label(data_num);
 
     SDL_RenderPresent(render);
-
-//    printf("Render gettop %i\n", lua_gettop(l));
 }
 
 void lua_init() {
