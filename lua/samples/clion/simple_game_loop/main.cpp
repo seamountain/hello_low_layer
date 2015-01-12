@@ -37,6 +37,11 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
+enum Layout {
+    BUTTOM_LEFT,
+    BUTTOM_RIGHT
+};
+
 void Update() {
     // http://www.c-lang.net/clock
     if (frame_count == TARGET_FPS) {
@@ -107,27 +112,39 @@ void draw_palette_button() {
 }
 
 // REFER TO http://www5.big.or.jp/~high/VENIO/kuz/kuz_are_14.htm
-void draw_num_label(int num) {
+void draw_num_label(int num, Layout layout) {
   string label = to_string(num);
   SDL_Rect src,drw;
   int text_size = 32;
   int margin = 10;
 
-  src.y = 0;
-  src.w = text_size;
-  src.h = text_size;
-  drw.w = text_size;
-  drw.h = text_size;
-  int i = 0;
-  while (i < label.length()) {
-    src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
-    drw.x = margin + i * text_size;
-    drw.y = SCREEN_HEIGHT - (text_size + margin);
+    src.y = 0;
+    src.w = text_size;
+    src.h = text_size;
+    drw.w = text_size;
+    drw.h = text_size;
+    int i = 0;
+    while (i < label.length()) {
+        switch (layout) {
+            case BUTTOM_LEFT:
+                src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
+                drw.x = margin + i * text_size;
+                drw.y = SCREEN_HEIGHT - (text_size + margin);
+                break;
+            case BUTTOM_RIGHT:
+                src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
+                drw.x = (int)((label.length() * text_size + margin) - (label.length() - i) * text_size);
+                drw.y = SCREEN_HEIGHT - (text_size + margin);
+                break;
+            default:
+                printf("ERROR Layout type is invalid\n");
+                break;
+        }
 
-    SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
+        SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
 
-    i++;
-  }
+        i++;
+    }
 }
 
 void Draw() {
@@ -192,7 +209,7 @@ void Draw() {
     }
 
     draw_palette_button();
-    draw_num_label(data_num);
+    draw_num_label(data_num, BUTTOM_LEFT);
 
     SDL_RenderPresent(render);
 }
