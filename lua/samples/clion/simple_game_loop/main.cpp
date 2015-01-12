@@ -14,6 +14,7 @@ string path = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion
 int TARGET_FPS = 60;
 // milli seconds per frame
 int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
+int fps;
 
 lua_State* l;
 SDL_Window* w;
@@ -37,19 +38,45 @@ Palette current_palette = Palette::Black;
 
 vector<SDL_Rect*> palette_buttons_rect;
 
-enum Layout {
-    BUTTOM_LEFT,
-    BUTTOM_RIGHT
+enum class Layout {
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT
 };
+
+// REFER TO http://www5.big.or.jp/~high/VENIO/kuz/kuz_are_14.htm
+void draw_num_label(int num, Layout layout) {
+    string label = to_string(num);
+    SDL_Rect src,drw;
+    int text_size = 32;
+    int margin = 10;
+
+    src.y = 0;
+    src.w = text_size;
+    src.h = text_size;
+    drw.w = text_size;
+    drw.h = text_size;
+
+    int i = 0;
+    while (i < label.length()) {
+        src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
+        drw.y = SCREEN_HEIGHT - (text_size + margin);
+        switch (layout) {
+            case Layout::BOTTOM_LEFT:
+                drw.x = margin + i * text_size;
+                break;
+            case Layout::BOTTOM_RIGHT:
+                drw.x = (int)((SCREEN_WIDTH - (label.length() * text_size + margin)) + (i * text_size));
+                break;
+        }
+
+        SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
+
+        i++;
+    }
+}
 
 void Update() {
     // http://www.c-lang.net/clock
-    if (frame_count == TARGET_FPS) {
-        frame_count = 0;
-    } else {
-        frame_count++;
-    }
-
     lua_getglobal(l, "move_data");
 
     if (lua_pcall(l, 0, 0, 0)) {
@@ -108,42 +135,6 @@ void draw_palette_button() {
         }
 
         SDL_RenderFillRect(render, palette_buttons_rect[i]);
-    }
-}
-
-// REFER TO http://www5.big.or.jp/~high/VENIO/kuz/kuz_are_14.htm
-void draw_num_label(int num, Layout layout) {
-  string label = to_string(num);
-  SDL_Rect src,drw;
-  int text_size = 32;
-  int margin = 10;
-
-    src.y = 0;
-    src.w = text_size;
-    src.h = text_size;
-    drw.w = text_size;
-    drw.h = text_size;
-    int i = 0;
-    while (i < label.length()) {
-        switch (layout) {
-            case BUTTOM_LEFT:
-                src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
-                drw.x = margin + i * text_size;
-                drw.y = SCREEN_HEIGHT - (text_size + margin);
-                break;
-            case BUTTOM_RIGHT:
-                src.x = (label[i] - ASCII_CODE_ZERO) * text_size; // set num texture position
-                drw.x = (int)((label.length() * text_size + margin) - (label.length() - i) * text_size);
-                drw.y = SCREEN_HEIGHT - (text_size + margin);
-                break;
-            default:
-                printf("ERROR Layout type is invalid\n");
-                break;
-        }
-
-        SDL_RenderCopy(render, texture, &src, &drw); // Copy the texture into render
-
-        i++;
     }
 }
 
@@ -209,7 +200,8 @@ void Draw() {
     }
 
     draw_palette_button();
-    draw_num_label(data_num, BUTTOM_LEFT);
+    draw_num_label(data_num, Layout::BOTTOM_LEFT);
+    draw_num_label(fps, Layout::BOTTOM_RIGHT);
 
     SDL_RenderPresent(render);
 }
@@ -338,6 +330,10 @@ int main(int argc, char* argv[])
     // initialize rand
     srand((unsigned)time(NULL));
 
+    float FPS_CALC_INTERVAL = 0.5;
+    clock_t prev_time = clock();
+    clock_t spent_time;
+
     while (true) {
         // check event
         if (!pollingEvent()) break;
@@ -351,7 +347,15 @@ int main(int argc, char* argv[])
         // wait
         clock_t end = clock();
 
-        // TODO Display fps
+        // calc fps
+        // http://hakuhin.jp/as/fps.html#FPS_00
+        double current_interval_time = (double)(end - prev_time) / CLOCKS_PER_SEC;
+        if (FPS_CALC_INTERVAL <= current_interval_time) {
+            spent_time = (clock() - prev_time);
+            fps = (int)(frame_count / ((double)spent_time / CLOCKS_PER_SEC));
+            prev_time = clock();
+            frame_count = 0;
+        }
 
         // spent milli seconds
         double diff = (double)(end - begin) / CLOCKS_PER_SEC * 1000;
@@ -365,6 +369,8 @@ int main(int argc, char* argv[])
                 usleep(0);
             }
         }
+
+        frame_count++;
     }
 
     dealloc();
