@@ -13,7 +13,7 @@ space_tree = {
   }},
 }
 
--- 木構造イメージ図
+-- Tree structure diagram
 --      space_tree
 --      a        b
 --    c   d    e   f
@@ -59,7 +59,7 @@ function add_to_tree(d)
 end
 
 function update_node(index)
-  -- TODO 境界位置にある時、複数の空間に属すように変更
+  -- TODO Add storing leafs at multi spaces when the data on a border
   local d = data_list[index]
   local target_node = get_target_space(d)
 
