@@ -7,6 +7,7 @@ Data.new = function (x, y, color_id, w, h, d)
   obj.w = w
   obj.h = h
   obj.d = d
+  obj.data_leaf = {}
 
   return obj
 end

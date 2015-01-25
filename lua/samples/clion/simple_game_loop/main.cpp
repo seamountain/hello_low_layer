@@ -222,6 +222,16 @@ void lua_init() {
         printf("error 1: %s\n", lua_tostring(l, -1));
     }
 
+    string DataLeafScript = path + "lua/data_leaf.lua";
+    if (luaL_dofile(l, DataLeafScript.c_str())) {
+        printf("error 1: %s\n", lua_tostring(l, -1));
+    }
+
+    string spacePertitionScript = path + "lua/space_pertition.lua";
+    if (luaL_dofile(l, spacePertitionScript.c_str())) {
+        printf("error 1: %s\n", lua_tostring(l, -1));
+    }
+
     lua_getglobal(l, "set_screen_size");
     lua_pushnumber(l, SCREEN_WIDTH);
     lua_pushnumber(l, SCREEN_HEIGHT);

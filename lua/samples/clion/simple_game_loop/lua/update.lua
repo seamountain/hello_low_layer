@@ -17,7 +17,7 @@ end
 function move(index, list_size)
   local d = data_list[index]
 
-  -- TODO Fix removed data list index
+  -- TODO Fix storing invalida data at data_list[index]
   if data_list[index] == nil then
     return 0
   end
