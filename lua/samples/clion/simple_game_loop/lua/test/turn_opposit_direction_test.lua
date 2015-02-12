@@ -1,12 +1,3 @@
--- Run this at not test but lua directory
-require("update")
-require("data")
-require("data_manager")
-
--- http://lua-users.org/wiki/UnitTesting
-require('test/luaunit/luaunit')
-
-TestUpdate = {}
 function TestUpdate:test_turn_opposit_direction()
   local left = 0
   local top = 1
@@ -29,5 +20,3 @@ function TestUpdate:test_turn_opposit_direction()
   turn_opposite_direction(d)
   assertEquals(d.d, top)
 end
-
-LuaUnit:run()

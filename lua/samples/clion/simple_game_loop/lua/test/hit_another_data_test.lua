@@ -1,30 +1,5 @@
--- Run this at not test but lua directory
-require("update")
-require("data")
-require("data_manager")
-require("data_leaf")
-require("space_pertition")
-
--- http://lua-users.org/wiki/UnitTesting
-require('test/luaunit/luaunit')
-
--- TODO Add before method
-
-screen_width = 640
-screen_height = 640
-left = 0
-right = 2
-function before_hit_another_data()
-  local w = 20
-  local h = 20
-
-  register_data_with_params(10, 10, 1, w, h, left)
-  register_data_with_params(10, 10, 1, w, h, right)
-end
-
-TestUpdate = {}
 function TestUpdate:test_hit_another_data()
-  before_hit_another_data()
+  create_test_data()
 
   local data_index = 1
   hit_another_data(data_index)
@@ -59,5 +34,3 @@ function TestUpdate:test_not_hit_another_data()
   assertEquals(d1.d, left)
   assertEquals(d2.d, right)
 end
-
-LuaUnit:run()
