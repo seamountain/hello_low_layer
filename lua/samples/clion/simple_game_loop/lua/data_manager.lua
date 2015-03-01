@@ -1,8 +1,9 @@
 data_list = {}
 
 function register_data(x, y, color_id)
-  local w = 10
-  local h = 10
+  local size = math.random(5, 20)
+  local w = size
+  local h = size
   local dir = math.random(0, 3)
   local d = Data.new(x, y, color_id, w, h, dir)
   table.insert(data_list, d)

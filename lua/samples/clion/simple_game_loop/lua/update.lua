@@ -36,7 +36,7 @@ function move(index, list_size)
     is_attacked = false
   end
 
-  local speed = (d.w * d.h) / 8
+  local speed = (d.w * d.h) / 10
   if d.d == 0 then
     d.x = d.x - speed
   elseif d.d == 1 then
