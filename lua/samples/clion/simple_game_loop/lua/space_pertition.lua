@@ -18,6 +18,7 @@ space_tree = {
 --      a        b
 --    c   d    e   f
 --  ghij klmn opqr stuv
+--  g1 g2 g3 g4  h1 h2 h3 h4  i1 i2 i3 i4  j1 j2 j3 j4 ...
 
 node_a = space_tree[1]
 node_b = space_tree[2]

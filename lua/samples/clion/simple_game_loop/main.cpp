@@ -98,6 +98,14 @@ void register_drawing_data(int x, int y) {
     }
 }
 
+void register_boss_data() {
+    lua_getglobal(l, "register_boss_data");
+
+    if (lua_pcall(l, 0, 0, 0)) {
+        printf("call_lua error: %s\n", lua_tostring(l, -1));
+    }
+}
+
 void init_num_texture() {
     string image_path = path + "images/font.bmp";
     SDL_Surface *bmp = SDL_LoadBMP(image_path.c_str());
@@ -214,6 +222,11 @@ void lua_init() {
 
     string dataScript = path + "lua/data.lua";
     if (luaL_dofile(l, dataScript.c_str())) {
+        printf("error 1: %s\n", lua_tostring(l, -1));
+    }
+
+    string bossScript = path + "lua/boss.lua";
+    if (luaL_dofile(l, bossScript.c_str())) {
         printf("error 1: %s\n", lua_tostring(l, -1));
     }
 
@@ -344,6 +357,7 @@ int main(int argc, char* argv[])
     clock_t prev_time = clock();
     clock_t spent_time;
 
+    register_boss_data();
     while (true) {
         // check event
         if (!pollingEvent()) break;

@@ -17,6 +17,10 @@ end
 function move(index, list_size)
   local d = data_list[index]
 
+  if d.is_move == false then
+    return 0
+  end
+
   -- TODO Fix storing invalida data at data_list[index]
   if data_list[index] == nil then
     return 0

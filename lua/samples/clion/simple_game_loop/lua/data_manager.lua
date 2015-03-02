@@ -11,6 +11,20 @@ function register_data(x, y, color_id)
   add_to_tree(d)
 end
 
+function register_boss_data()
+  local color_id = 1
+  local x = screen_width / 2
+  local y = screen_height / 2
+  local w = 100
+  local h = 100
+  local dir = math.random(0, 3) --- boss なら動かない
+  local b = Boss.new(x, y, color_id, w, h, dir)
+
+  table.insert(data_list, b)
+
+  add_to_tree(b)
+end
+
 function register_data_with_params(x, y, color_id, w, h, dir)
   local d = Data.new(x, y, color_id, w, h, dir)
   table.insert(data_list, d)

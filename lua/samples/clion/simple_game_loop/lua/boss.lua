@@ -1,5 +1,5 @@
-Data = {}
-Data.new = function (x, y, color_id, w, h, d)
+Boss = {}
+Boss.new = function (x, y, color_id, w, h, d)
   local obj = {}
   obj.x = x
   obj.y = y
@@ -8,7 +8,9 @@ Data.new = function (x, y, color_id, w, h, d)
   obj.h = h
   obj.d = d
   obj.data_leaf = {}
-  obj.is_move = true
+  obj.is_move = false
+
+  setmetatable(obj, {__index=Data})
 
   return obj
 end
