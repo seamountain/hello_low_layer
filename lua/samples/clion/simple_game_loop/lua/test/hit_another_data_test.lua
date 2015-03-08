@@ -6,9 +6,15 @@ function TestUpdate:test_hit_another_data()
 
   local d1 = data_list[1]
   local d2 = data_list[2]
+  local d3 = data_list[3]
+  local d4 = data_list[4]
+  local d5 = data_list[5]
 
   assertEquals(d1.d, right)
   assertEquals(d2.d, left)
+  assertEquals(d3.d, left)
+  assertEquals(d4.d, right)
+  assertEquals(d5.d, right)
 end
 
 function before_not_hit_another_data()

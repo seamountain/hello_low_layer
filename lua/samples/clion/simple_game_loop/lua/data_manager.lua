@@ -38,6 +38,11 @@ end
 
 function hit_another_data(index)
   local d = data_list[index]
+
+  if d.is_move == false then
+    return
+  end
+
   local list_size = #d.data_leaf.p_node
   for i = 1, list_size do
     local target = d.data_leaf.p_node[i].data
@@ -52,10 +57,11 @@ function hit_another_data(index)
       local y2 = target.y
       local h2 = target.h
 
-      if ((x1 - w2 <= x2 and x2 <= x1 + w1) and (y1 - h2 <= y2 and y2 <= y1 + h1)) then
-        -- TODO Add data splitting
-        turn_opposite_direction(d)
-        turn_opposite_direction(target)
+      -- TODO Add data splitting
+      if ((x1 < x2) and x2 < (x1 + w1)) and ((y1 < y2) and (y2 < (y1 + h1))) then
+        reset_potision(d, target)
+      elseif (x2 < x1 and x1 < (x2 + w2)) and ((y2 < y1) and y1 < (y2 + h2)) then
+        reset_potision(d, target)
       end
     end
   end
