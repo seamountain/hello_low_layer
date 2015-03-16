@@ -57,11 +57,18 @@ function hit_another_data(index)
       local y2 = target.y
       local h2 = target.h
 
-      -- TODO Add data splitting
+      local is_attacked = false
       if ((x1 < x2) and x2 < (x1 + w1)) and ((y1 < y2) and (y2 < (y1 + h1))) then
-        reset_potision(d, target)
+        is_attacked = true
       elseif (x2 < x1 and x1 < (x2 + w2)) and ((y2 < y1) and y1 < (y2 + h2)) then
-        reset_potision(d, target)
+        is_attacked = true
+      end
+
+      if is_attacked then
+        -- TODO Add data splitting
+        -- TODO Add collision pos
+        d:onCollisionEnter(target)
+        --target:onCollisionEnter() -- TODO this code cause nil error
       end
     end
   end
