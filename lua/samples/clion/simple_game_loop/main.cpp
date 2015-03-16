@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include <SDL_surface.h>
 #include "libs/SDL2-2.0.3/include/SDL.h"
 #include "libs/lua-5.2.3/include/lua.hpp"
 #include "Color.h"
@@ -21,6 +22,10 @@ SDL_Window* w;
 SDL_Renderer* render;
 SDL_GLContext context;
 SDL_Texture *texture;
+SDL_Texture *smile_texture;
+SDL_Texture *painful_texture;
+bool is_smile = true;
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
 
@@ -75,6 +80,34 @@ void draw_num_label(int num, Layout layout) {
     }
 }
 
+void draw_boss_texture(bool is_smile) {
+    int face_size = 100;
+    SDL_Rect src,drw;
+    src.x = 0;
+    src.y = 0;
+    src.w = face_size;
+    src.h = face_size;
+
+    drw.x = SCREEN_WIDTH / 2;
+    drw.y = SCREEN_HEIGHT / 2;
+    drw.w = face_size;
+    drw.h = face_size;
+
+    SDL_Texture** target_texture;
+    if (is_smile) {
+        target_texture = &smile_texture;
+    } else {
+        target_texture = &painful_texture;
+    }
+    SDL_RenderCopy(render, *target_texture, &src, &drw); // Copy the texture into render
+}
+
+int set_boss_texture_flag(lua_State *l) {
+    is_smile = (bool)lua_toboolean(l, 1);
+    printf("is_smile %s \n", is_smile ? "true" : "false");
+    return 0;
+}
+
 void Update() {
     // http://www.c-lang.net/clock
     lua_getglobal(l, "move_data");
@@ -108,18 +141,48 @@ void register_boss_data() {
 
 void init_num_texture() {
     string image_path = path + "images/font.bmp";
-    SDL_Surface *bmp = SDL_LoadBMP(image_path.c_str());
-  if (!bmp) {
+    SDL_Surface *font_bmp = SDL_LoadBMP(image_path.c_str());
+  if (!font_bmp) {
     printf("bmp is null. Error: %s\n", SDL_GetError());
     return;
   }
 
-  texture = SDL_CreateTextureFromSurface(render, bmp);
+  texture = SDL_CreateTextureFromSurface(render, font_bmp);
 
-  SDL_FreeSurface(bmp);
+  SDL_FreeSurface(font_bmp);
   if (texture == nullptr){
     std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
   }
+}
+
+void init_boss_texture() {
+    string smile_image_path = path + "images/smile.bmp";
+    SDL_Surface *smile_bmp = SDL_LoadBMP(smile_image_path.c_str());
+    if (!smile_bmp) {
+        printf("smile_bmp is null. Error: %s\n", SDL_GetError());
+        return;
+    }
+
+    smile_texture = SDL_CreateTextureFromSurface(render, smile_bmp);
+
+    SDL_FreeSurface(smile_bmp);
+    if (smile_texture == nullptr){
+        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+    }
+
+    string painful_image_path = path + "images/painful.bmp";
+    SDL_Surface *painful_bmp = SDL_LoadBMP(painful_image_path.c_str());
+    if (!painful_bmp) {
+        printf("painful_bmp is null. Error: %s\n", SDL_GetError());
+        return;
+    }
+
+    painful_texture = SDL_CreateTextureFromSurface(render, painful_bmp);
+
+    SDL_FreeSurface(smile_bmp);
+    if (painful_texture == nullptr){
+        std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+    }
 }
 
 void init_palette_button() {
@@ -157,12 +220,13 @@ void Draw() {
     }
     int data_num = (int) lua_tonumber(l, -1);
 
+    int without_draw_id = -1;
     map<int, vector<SDL_Rect *>> data_list;
     if (data_num != 0) {
         lua_getglobal(l, "data_list");
         lua_pushnil(l);
         while (lua_next(l, -2) != 0) {
-            int colorId;
+            int color_id;
             lua_pushnil(l);
             SDL_Rect *r = new SDL_Rect();
             while (lua_next(l, -2) != 0) {
@@ -176,15 +240,19 @@ void Draw() {
                 } else if (key == "h") {
                     r->h = (int) lua_tointeger(l, -1);
                 } else if (key == "color_id") {
-                    colorId = (int) lua_tointeger(l, -1);
+                    color_id = (int) lua_tointeger(l, -1);
                 }
                 lua_pop(l, 1);
             }
-            data_list[colorId].push_back(r);
+            if (color_id != without_draw_id) {
+                data_list[color_id].push_back(r);
+            }
             lua_pop(l, 1);
         }
     }
     lua_settop(l, 0);
+
+    draw_boss_texture(is_smile);
 
     if (data_list.size() != 0) {
         for (int i = 0; i < palettes.size(); i++) {
@@ -252,6 +320,9 @@ void lua_init() {
         printf("call_lua error: %s\n", lua_tostring(l, -1));
     }
     lua_pop(l, 1);
+
+    // C functions
+    lua_register(l, "set_boss_texture_flag", set_boss_texture_flag);
 }
 
 // REFER TO http://nyaocat.hatenablog.jp/entry/2014/01/27/153145
@@ -276,6 +347,7 @@ bool init() {
     init_palette_button();
 
     init_num_texture();
+    init_boss_texture();
 
     return true;
 }
@@ -358,6 +430,8 @@ int main(int argc, char* argv[])
     clock_t spent_time;
 
     register_boss_data();
+
+    // main loop
     while (true) {
         // check event
         if (!pollingEvent()) break;

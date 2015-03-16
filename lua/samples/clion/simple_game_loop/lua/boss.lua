@@ -1,9 +1,9 @@
 Boss = {}
-Boss.new = function (x, y, color_id, w, h, d)
+Boss.new = function (x, y, w, h, d)
   local obj = {}
   obj.x = x
   obj.y = y
-  obj.color_id = color_id
+  obj.color_id = -1
   obj.w = w
   obj.h = h
   obj.d = d
@@ -11,11 +11,11 @@ Boss.new = function (x, y, color_id, w, h, d)
   obj.is_move = false
 
   obj.onCollisionEnter = function (self)
-    --print("ENTER")
+    set_boss_texture_flag(false)
   end
 
   obj.onCollisionExit = function (self)
-    --print("EXIT")
+    set_boss_texture_flag(true)
   end
 
   setmetatable(obj, {__index=Data})

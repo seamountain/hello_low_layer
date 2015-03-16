@@ -12,13 +12,12 @@ function register_data(x, y, color_id)
 end
 
 function register_boss_data()
-  local color_id = 1
   local x = screen_width / 2
   local y = screen_height / 2
   local w = 100
   local h = 100
   local dir = math.random(0, 3) --- boss なら動かない
-  local b = Boss.new(x, y, color_id, w, h, dir)
+  local b = Boss.new(x, y, w, h, dir)
 
   table.insert(data_list, b)
 
@@ -64,11 +63,10 @@ function hit_another_data(index)
         is_attacked = true
       end
 
-      if is_attacked then
+      if is_attacked and d.is_move == true then
         -- TODO Add data splitting
         -- TODO Add collision pos
         d:onCollisionEnter(target)
-        --target:onCollisionEnter() -- TODO this code cause nil error
       end
     end
   end
