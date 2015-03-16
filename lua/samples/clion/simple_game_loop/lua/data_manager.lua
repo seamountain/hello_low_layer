@@ -63,10 +63,14 @@ function hit_another_data(index)
         is_attacked = true
       end
 
-      if is_attacked and d.is_move == true then
-        -- TODO Add data splitting
-        -- TODO Add collision pos
-        d:onCollisionEnter(target)
+      -- TODO Add data splitting
+      -- TODO Add collision pos
+      if d.is_move then
+        if is_attacked and not d.on_collision_enter then
+          d:onCollisionEnter(target)
+        elseif not is_attacked and d.on_collision_enter then
+          d:onCollisionExit(target)
+        end
       end
     end
   end

@@ -104,7 +104,6 @@ void draw_boss_texture(bool is_smile) {
 
 int set_boss_texture_flag(lua_State *l) {
     is_smile = (bool)lua_toboolean(l, 1);
-    printf("is_smile %s \n", is_smile ? "true" : "false");
     return 0;
 }
 
