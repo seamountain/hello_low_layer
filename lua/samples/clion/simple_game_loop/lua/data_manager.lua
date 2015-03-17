@@ -66,9 +66,9 @@ function hit_another_data(index)
       -- TODO Add data splitting
       -- TODO Add collision pos
       if d.is_move then
-        if is_attacked and not d.on_collision_enter then
+        if is_attacked and not d.on_boss_collision_enter then
           d:onCollisionEnter(target)
-        elseif not is_attacked and d.on_collision_enter then
+        elseif not is_attacked and d.on_boss_collision_enter then
           d:onCollisionExit(target)
         end
       end
