@@ -155,6 +155,7 @@ void init_num_texture() {
 }
 
 void init_boss_texture() {
+    // Load smile texture
     string smile_image_path = path + "images/smile.bmp";
     SDL_Surface *smile_bmp = SDL_LoadBMP(smile_image_path.c_str());
     if (!smile_bmp) {
@@ -169,6 +170,7 @@ void init_boss_texture() {
         std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
     }
 
+    // Load painful texture
     string painful_image_path = path + "images/painful.bmp";
     SDL_Surface *painful_bmp = SDL_LoadBMP(painful_image_path.c_str());
     if (!painful_bmp) {
@@ -178,7 +180,7 @@ void init_boss_texture() {
 
     painful_texture = SDL_CreateTextureFromSurface(render, painful_bmp);
 
-    SDL_FreeSurface(smile_bmp);
+    SDL_FreeSurface(painful_bmp);
     if (painful_texture == nullptr){
         std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
     }
