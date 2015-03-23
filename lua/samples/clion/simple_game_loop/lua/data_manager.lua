@@ -16,7 +16,6 @@ function register_boss_data()
   local y = screen_height / 2
   local w = 100
   local h = 100
-  local dir = math.random(0, 3) --- boss なら動かない
   local b = Boss.new(x, y, w, h, dir)
 
   table.insert(data_list, b)
