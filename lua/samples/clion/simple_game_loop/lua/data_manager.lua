@@ -16,7 +16,7 @@ function register_boss_data()
   local y = screen_height / 2
   local w = 100
   local h = 100
-  local b = Boss.new(x, y, w, h, dir)
+  local b = Boss.new(x, y, w, h)
 
   table.insert(data_list, b)
 
