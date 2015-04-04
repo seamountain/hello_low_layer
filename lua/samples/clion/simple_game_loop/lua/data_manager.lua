@@ -28,6 +28,8 @@ function register_data_with_params(x, y, color_id, w, h, dir)
   table.insert(data_list, d)
 
   add_to_tree(d)
+
+  return d
 end
 
 function data_num()
@@ -56,9 +58,9 @@ function hit_another_data(index)
       local h2 = target.h
 
       local is_attacked = false
-      if ((x1 < x2) and x2 < (x1 + w1)) and ((y1 < y2) and (y2 < (y1 + h1))) then
+      if ((x1 <= x2) and x2 <= (x1 + w1)) and ((y1 <= y2) and (y2 <= (y1 + h1))) then
         is_attacked = true
-      elseif (x2 < x1 and x1 < (x2 + w2)) and ((y2 < y1) and y1 < (y2 + h2)) then
+      elseif (x2 <= x1 and x1 <= (x2 + w2)) and ((y2 <= y1) and y1 <= (y2 + h2)) then
         is_attacked = true
       end
 
@@ -92,8 +94,7 @@ function move_data()
   end
 end
 
-function split_data(index)
-  local d = data_list[index]
+function split_data(d)
   local shaved_rate = 0.9
   d.w = d.w * shaved_rate
   d.h = d.h * shaved_rate
