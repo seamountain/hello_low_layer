@@ -21,13 +21,18 @@ down = 3
 -- color id
 green = 1
 
-function create_test_data()
-  local w = 20
-  local h = 20
+-- default x/y
+x = 10
+y = 10
 
-  register_data_with_params(10, 10, green, w, h, left)
-  register_data_with_params(10, 10, green, w, h, left)
-  register_data_with_params(10 + w - 1, 10 + h - 1, green, w, h, right)
-  register_data_with_params(10 - w, 10 - h, green, w, h, right)
-  register_data_with_params(10 - w + 1, 10 - h + 1, green, w, h, right)
+-- default width/height
+w = 20
+h = 20
+
+function TestUpdate:tearDown()
+  clear_data()
+end
+
+function clear_data()
+  data_list = {}
 end

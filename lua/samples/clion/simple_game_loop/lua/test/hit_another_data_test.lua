@@ -1,41 +1,53 @@
-function TestUpdate:test_hit_another_data()
-  create_test_data()
+function TestUpdate:test_hit_same_position_same_size_data()
+  local d1 = register_data_with_params(x, y, green, w, h, left)
+  local d2 = register_data_with_params(x, y, green, w, h, left)
 
   local data_index = 1
   hit_another_data(data_index)
-
-  local d1 = data_list[1]
-  local d2 = data_list[2]
-  local d3 = data_list[3]
-  local d4 = data_list[4]
-  local d5 = data_list[5]
 
   assertEquals(d1.d, right)
   assertEquals(d2.d, left)
-  assertEquals(d3.d, left)
-  assertEquals(d4.d, right)
-  assertEquals(d5.d, right)
 end
 
-function before_not_hit_another_data()
-  local d1 = data_list[1]
-  local d2 = data_list[2]
-
-  d2.x = d1.x + d1.w + 1
-  d2.y = d1.y + d1.h + 1
-
-  d1.d = left
-  d2.d = right
-end
-
-function TestUpdate:test_not_hit_another_data()
-  before_not_hit_another_data()
+function TestUpdate:test_hit_top_overlap_data()
+  local d1 = register_data_with_params(x, y, green, w, h, left)
+  local d2 = register_data_with_params(x - w + 1, y - h + 1, green, w, h, right)
 
   local data_index = 1
   hit_another_data(data_index)
 
-  local d1 = data_list[1]
-  local d2 = data_list[2]
+  assertEquals(d1.d, right)
+  assertEquals(d2.d, right)
+end
+
+function TestUpdate:test_hit_buttom_overlap_data()
+  local d1 = register_data_with_params(x, y, green, w, h, left)
+  local d2 = register_data_with_params(x + w - 1, y + h - 1, green, w, h, right)
+
+  local data_index = 1
+  hit_another_data(data_index)
+
+  assertEquals(d1.d, right)
+  assertEquals(d2.d, right)
+end
+
+function TestUpdate:test_hit_same_buttom_and_top_pos_data()
+  local d1 = register_data_with_params(x, y, green, w, h, left)
+  local d2 = register_data_with_params(x - w, y - h, green, w, h, right)
+
+  local data_index = 1
+  hit_another_data(data_index)
+
+  assertEquals(d1.d, right)
+  assertEquals(d2.d, right)
+end
+
+function TestUpdate:test_not_hit_another_data()
+  local d1 = register_data_with_params(x, y, green, w, h, left)
+  local d2 = register_data_with_params(x + w + 1, y + h + 1, green, w, h, right)
+
+  local data_index = 1
+  hit_another_data(data_index)
 
   assertEquals(d1.d, left)
   assertEquals(d2.d, right)
