@@ -94,7 +94,8 @@ function move_data()
   end
 end
 
-function split_data(d)
+function split_data(index)
+  local d = data_list[index]
   local shaved_rate = 0.9
   d.w = d.w * shaved_rate
   d.h = d.h * shaved_rate
