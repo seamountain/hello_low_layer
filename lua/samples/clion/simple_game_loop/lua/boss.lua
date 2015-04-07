@@ -8,7 +8,7 @@ Boss.new = function (x, y, w, h)
   obj.h = h
   obj.d = -1
   obj.data_leaf = {}
-  obj.is_move = true
+  obj.is_move = false
 
   obj.onCollisionEnter = function (self)
     set_boss_texture_flag(false)
