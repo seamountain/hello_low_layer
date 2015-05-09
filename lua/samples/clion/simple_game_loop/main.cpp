@@ -80,18 +80,18 @@ void draw_num_label(int num, Layout layout) {
     }
 }
 
-void draw_boss_texture(bool is_smile) {
-    int face_size = 100;
+void draw_boss_texture(bool is_smile, SDL_Rect *r) {
+    int face_img_size = 100;
     SDL_Rect src,drw;
     src.x = 0;
     src.y = 0;
-    src.w = face_size;
-    src.h = face_size;
+    src.w = face_img_size;
+    src.h = face_img_size;
 
     drw.x = SCREEN_WIDTH / 2;
     drw.y = SCREEN_HEIGHT / 2;
-    drw.w = face_size;
-    drw.h = face_size;
+    drw.w = r->w;
+    drw.h = r->h;
 
     SDL_Texture** target_texture;
     if (is_smile) {
@@ -221,8 +221,9 @@ void Draw() {
     }
     int data_num = (int) lua_tonumber(l, -1);
 
-    int without_draw_id = -1;
+    int boss_color_id = -1;
     map<int, vector<SDL_Rect *>> data_list;
+    SDL_Rect *boss_rect;
     if (data_num != 0) {
         lua_getglobal(l, "data_list");
         lua_pushnil(l);
@@ -245,7 +246,9 @@ void Draw() {
                 }
                 lua_pop(l, 1);
             }
-            if (color_id != without_draw_id) {
+            if (color_id == boss_color_id) {
+                boss_rect = r;
+            } else {
                 data_list[color_id].push_back(r);
             }
             lua_pop(l, 1);
@@ -253,7 +256,7 @@ void Draw() {
     }
     lua_settop(l, 0);
 
-    draw_boss_texture(is_smile);
+    draw_boss_texture(is_smile, boss_rect);
 
     if (data_list.size() != 0) {
         for (int i = 0; i < palettes.size(); i++) {
