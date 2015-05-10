@@ -17,6 +17,7 @@ function register_boss_data()
   local w = 100
   local h = 100
   local b = Boss.new(x, y, w, h)
+  b.d = math.random(0, 3)
 
   table.insert(data_list, b)
 
@@ -39,10 +40,6 @@ end
 function hit_another_data(index)
   local d = data_list[index]
 
-  if d.is_move == false then
-    return
-  end
-
   local list_size = #d.data_leaf.p_node
   for i = 1, list_size do
     local target = d.data_leaf.p_node[i].data
@@ -64,12 +61,11 @@ function hit_another_data(index)
         is_attacked = true
       end
 
-      -- TODO Add data splitting
-      -- TODO Add collision pos
-      if d.is_move then
-        if is_attacked and not d.on_boss_collision_enter then
-          d:onCollisionEnter(target)
-        elseif not is_attacked and d.on_boss_collision_enter then
+      -- TODO Fix this collision logic. This collisionEnter work with all data and boss but the collisionExit only with a boss.
+      if is_attacked then
+        d:onCollisionEnter(target)
+      else
+        if d.on_boss_collision_enter then
           d:onCollisionExit(target)
         end
       end

@@ -8,7 +8,31 @@ Boss.new = function (x, y, w, h)
   obj.h = h
   obj.d = -1
   obj.data_leaf = {}
-  obj.is_move = false
+  obj.is_boss = true -- Replace this frag with checking class
+  obj.is_move = true
+  obj.is_split = false
+  obj.move_frame_count = 0
+  obj.keep_same_direction_count = 50
+
+  obj.move_position = function (self)
+    local speed = (self.w * self.h) / 1000 / 2
+    if self.d == left then
+      self.x = self.x - speed
+    elseif self.d == up then
+      self.y = self.y - speed
+    elseif self.d == right then
+      self.x = self.x + speed
+    elseif self.d == down then
+      self.y = self.y + speed
+    end
+
+    if self.keep_same_direction_count < self.move_frame_count then
+      self.d = math.random(0, 3)
+      self.move_frame_count = 0
+    else
+      self.move_frame_count = self.move_frame_count + 1
+    end
+  end
 
   obj.onCollisionEnter = function (self)
     set_boss_texture_flag(false)

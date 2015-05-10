@@ -88,8 +88,8 @@ void draw_boss_texture(bool is_smile, SDL_Rect *r) {
     src.w = face_img_size;
     src.h = face_img_size;
 
-    drw.x = SCREEN_WIDTH / 2;
-    drw.y = SCREEN_HEIGHT / 2;
+    drw.x = r->x;
+    drw.y = r->y;
     drw.w = r->w;
     drw.h = r->h;
 

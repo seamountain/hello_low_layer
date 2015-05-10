@@ -9,11 +9,25 @@ Data.new = function (x, y, color_id, w, h, d)
   obj.d = d
   obj.data_leaf = {}
   obj.is_move = true
+  obj.is_split = true
   -- TODO fix enter/exit state handling logic
   obj.on_boss_collision_enter = false
 
+  obj.move_position = function (self)
+    local speed = (self.w * self.h) / 10
+    if self.d == left then
+      self.x = self.x - speed
+    elseif self.d == up then
+      self.y = self.y - speed
+    elseif self.d == right then
+      self.x = self.x + speed
+    elseif self.d == down then
+      self.y = self.y + speed
+    end
+  end
+
   obj.onCollisionEnter = function (self, target)
-    if target ~= nil and target.is_move == false then
+    if target.is_boss then
       target:onCollisionEnter()
       self.on_boss_collision_enter = true
     end
@@ -23,7 +37,7 @@ Data.new = function (x, y, color_id, w, h, d)
   end
 
   obj.onCollisionExit = function (self, target)
-    if target ~= nil and target.is_move == false then
+    if target.is_boss then
       target:onCollisionExit()
       self.on_boss_collision_enter = false
     end

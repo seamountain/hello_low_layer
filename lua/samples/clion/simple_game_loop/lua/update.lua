@@ -31,36 +31,31 @@ function move(index, list_size)
     return 0
   end
 
-  local is_attacked = true
-
-  if screen_width - d.w < d.x then
-    d.d = left
-  elseif d.x <= 0 then
-    d.d = right
-  elseif screen_height - d.h < d.y then
-    d.d = up
-  elseif d.y <= 0 then
-    d.d = down
-  else
-    is_attacked = false
-  end
-
-  local speed = (d.w * d.h) / 10
-  if d.d == left then
-    d.x = d.x - speed
-  elseif d.d == up then
-    d.y = d.y - speed
-  elseif d.d == right then
-    d.x = d.x + speed
-  elseif d.d == down then
-    d.y = d.y + speed
-  end
+  local is_attacked = check_wall_collision(d)
 
   if is_attacked then
+    turn_opposite_direction(d)
+  end
+
+  d:move_position()
+
+  if is_attacked and d.is_split then
     return split_data(index)
   end
 
   return 0
+end
+
+function check_wall_collision(d)
+  local is_attacked = true
+  if screen_width - d.w < d.x then
+  elseif d.x <= 0 then
+  elseif screen_height - d.h < d.y then
+  elseif d.y <= 0 then
+  else
+    is_attacked = false
+  end
+  return is_attacked
 end
 
 function turn_opposite_direction(d)
