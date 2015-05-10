@@ -96,7 +96,7 @@ function split_data(index)
   d.w = d.w * shaved_rate
   d.h = d.h * shaved_rate
 
-  local min_size = 2
+  local min_size = 3
   if d.w <= min_size or d.h <= min_size then
     remove_leaf(d)
     d.data_leaf = nil
