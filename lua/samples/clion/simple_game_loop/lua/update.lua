@@ -26,7 +26,7 @@ function move(index, list_size)
     return 0
   end
 
-  -- TODO Fix storing invalida data at data_list[index]
+  -- TODO Fix storing invalid data at data_list[index]
   if data_list[index] == nil then
     return 0
   end

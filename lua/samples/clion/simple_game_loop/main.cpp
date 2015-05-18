@@ -210,6 +210,54 @@ void draw_palette_button() {
     }
 }
 
+void draw_boss_params(SDL_Rect* boss_rect) {
+    if (boss_rect->w <= 0 || boss_rect->h <= 0) {
+        return;
+    }
+
+    int bar_width = 150;
+    int bar_height = 20;
+    int margin = 10;
+
+    int boss_orig_size = 100;
+
+    if (SDL_SetRenderDrawColor(render, 200, 200, 200, 1) < 0) {
+        printf("SDL Error %s\n", SDL_GetError());
+    }
+    SDL_Rect *hp_full_bar = new SDL_Rect();
+    hp_full_bar->x = SCREEN_WIDTH - bar_width - margin;
+    hp_full_bar->y = margin;
+    hp_full_bar->h = bar_height;
+    hp_full_bar->w = bar_width;
+    SDL_RenderFillRect(render, hp_full_bar);
+
+    float boss_hp_rate = ((float)(boss_rect->w * boss_rect->h) / (boss_orig_size * boss_orig_size));
+    SDL_Color *color = new SDL_Color();
+    if (0.3 < boss_hp_rate) {
+        color->r = 130;
+        color->g = 230;
+        color->b = 140;
+    } else {
+        color->r = 230;
+        color->g = 130;
+        color->b = 140;
+    }
+
+//    printf("w %i, h %i, rate %f\n", boss_rect->w, boss_rect->h, boss_hp_rate);
+
+    if (SDL_SetRenderDrawColor(render, color->r, color->g, color->b, 1) < 0) {
+        printf("SDL Error %s\n", SDL_GetError());
+    }
+    SDL_Rect *hp_bar = new SDL_Rect();
+    hp_bar->x = SCREEN_WIDTH - bar_width - margin;
+    hp_bar->y = margin;
+    hp_bar->h = bar_height;
+    int exist_hp_bar_width = (int)(bar_width * boss_hp_rate);
+    int min_width = 1;
+    hp_bar->w = (exist_hp_bar_width <= min_width) ? min_width : exist_hp_bar_width;
+    SDL_RenderFillRect(render, hp_bar);
+}
+
 void Draw() {
     // clear
     SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
@@ -280,6 +328,7 @@ void Draw() {
     }
 
     draw_palette_button();
+    draw_boss_params(boss_rect);
     draw_num_label(data_num, Layout::BOTTOM_LEFT);
     draw_num_label(fps, Layout::BOTTOM_RIGHT);
 

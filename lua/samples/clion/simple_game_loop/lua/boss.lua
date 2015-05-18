@@ -36,9 +36,11 @@ Boss.new = function (x, y, w, h)
 
   obj.onCollisionEnter = function (self)
     set_boss_texture_flag(false)
-    shrink_size = 0.1
-    self.w = self.w - shrink_size
-    self.h = self.h - shrink_size
+    if 0 <= self.w or 0 <= self.h then
+      shrink_size = 0.1
+      self.w = self.w - shrink_size
+      self.h = self.h - shrink_size
+    end
   end
 
   obj.onCollisionExit = function (self)

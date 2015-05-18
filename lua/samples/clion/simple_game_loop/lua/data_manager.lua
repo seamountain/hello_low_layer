@@ -64,6 +64,13 @@ function hit_another_data(index)
       -- TODO Fix this collision logic. This collisionEnter work with all data and boss but the collisionExit only with a boss.
       if is_attacked then
         d:onCollisionEnter(target)
+
+        -- TODO Delete boss data
+        --if d.is_boss then
+          --if remove_data(index) then
+            --return true
+          --end
+        --end
       else
         if d.on_boss_collision_enter then
           d:onCollisionExit(target)
@@ -71,6 +78,7 @@ function hit_another_data(index)
       end
     end
   end
+  return false
 end
 
 -- TODO Add test cheking data_list size after data remove
@@ -78,15 +86,15 @@ function move_data()
   local list_size = #data_list
   local i = 1
   while i <= list_size do
-    local changed_num = move(i, list_size)
+    local removed_data_num = move(i, list_size)
 
     -- The situation data wasn't deleted(data_list size wasn't changed)
-    if 0 <= changed_num then
+    if removed_data_num <= 0 then
       hit_another_data(i)
       update_node(i)
       i = i + 1
     end
-    list_size = list_size + changed_num
+    list_size = list_size - removed_data_num
   end
 end
 
@@ -96,15 +104,24 @@ function split_data(index)
   d.w = d.w * shaved_rate
   d.h = d.h * shaved_rate
 
+  local is_removed = remove_data(index)
+  if is_removed then
+    return 1
+  end
+
+  local slide_rate = math.random(890, 950) / 1000
+  register_data_with_params(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d)
+  return 0
+end
+
+function remove_data(index)
+  local d = data_list[index]
   local min_size = 3
   if d.w <= min_size or d.h <= min_size then
     remove_leaf(d)
     d.data_leaf = nil
     table.remove(data_list, index)
-    return -1
+    return true
   end
-
-  local slide_rate = math.random(890, 950) / 1000
-  register_data_with_params(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d)
-  return 1
+  return false
 end
