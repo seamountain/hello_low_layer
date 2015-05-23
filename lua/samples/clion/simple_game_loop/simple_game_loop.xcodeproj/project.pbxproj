@@ -340,10 +340,7 @@
 				);
 				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
 				OTHER_CFLAGS = "    ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-std=c++11",
@@ -386,10 +383,7 @@
 				);
 				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
 				OTHER_CFLAGS = "    -DNDEBUG  ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-std=c++11",
@@ -523,10 +517,7 @@
 				);
 				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
 				OTHER_CFLAGS = "    -DNDEBUG  ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-std=c++11",
@@ -648,10 +639,7 @@
 				);
 				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
 				OTHER_CFLAGS = "       -DNDEBUG  ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-std=c++11",
