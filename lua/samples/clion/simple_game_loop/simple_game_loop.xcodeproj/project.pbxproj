@@ -1,0 +1,781 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		1E82F0D39B7F4014B97D68D5 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 210D28D259C54A85AE06C32E /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				8BF20C9DCCF34C5E82CDB3EB /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		7CAC57D79F93489DAFAA735F /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = E62AC4E513F0495A85EE8E22 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				E3992E37B8AC4C0380D77B33 /* CMake Rules */,
+			);
+			dependencies = (
+				4F3A65E88171443FB4375D99 /* PBXTargetDependency */,
+				B3F475E7091749F9A30CAB7D /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		D60D3A34A38F421C99857824 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCD9DAB353BA4A4DB3578B5F /* main.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		E2FA00477BFE4692BEE9BF47 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D886D9CDE44A33A8A7FD51 /* Data.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		EDD49D64E3A14003A4F75EF5 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 54D1221D57B044F1B9066078 /* Color.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		084B72E15B0B4F1DA92AA52A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED60F8D39E2B4470BE4E5FCA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E82F0D39B7F4014B97D68D5;
+			remoteInfo = ZERO_CHECK;
+		};
+		24F5B19FD769425B9BE3D18E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED60F8D39E2B4470BE4E5FCA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E82F0D39B7F4014B97D68D5;
+			remoteInfo = ZERO_CHECK;
+		};
+		B730F4D33BBC4263946B98B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED60F8D39E2B4470BE4E5FCA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 048457D621AA4378B1D183AC;
+			remoteInfo = simple_game_loop;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		39D886D9CDE44A33A8A7FD51 /* Data.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = Data.cpp; sourceTree = SOURCE_ROOT; };
+		54D1221D57B044F1B9066078 /* Color.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = Color.cpp; sourceTree = SOURCE_ROOT; };
+		6AEF692A89714C71BC660237 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		88D811F61DF4480CB4332979 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		CCD9DAB353BA4A4DB3578B5F /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		D1D39539355E448E9109BFF9 /* simple_game_loop */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = simple_game_loop; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1B7266C6A5147FEB14B26B9 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2CB3533F0FDA439E93A7DE2F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4B9042042FFA4F43A0F9C013 = {
+			isa = PBXGroup;
+			children = (
+				EFFEAA6A887F481BB0A5AC5A /* Sources */,
+				2CB3533F0FDA439E93A7DE2F /* Resources */,
+				C14D543EE7B04EC190DD87C1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4F9B2D15401C42E686B6BB15 /* simple_game_loop */ = {
+			isa = PBXGroup;
+			children = (
+				DF5A643C89C241AB92C89635 /* Source Files */,
+				88D811F61DF4480CB4332979 /* CMakeLists.txt */,
+			);
+			name = simple_game_loop;
+			sourceTree = "<group>";
+		};
+		6BB4011DDE3F4D0FAA426919 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		758AE34351034E68B71303BA /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				CC36B8FB65F744BCA36A3A9B /* CMake Rules */,
+				E1B7266C6A5147FEB14B26B9 /* CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		C0590DEBA7464294874798CB /* ZERO_CHECK */ = {
+			isa = PBXGroup;
+			children = (
+				6BB4011DDE3F4D0FAA426919 /* CMake Rules */,
+				6AEF692A89714C71BC660237 /* CMakeLists.txt */,
+			);
+			name = ZERO_CHECK;
+			sourceTree = "<group>";
+		};
+		C14D543EE7B04EC190DD87C1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D1D39539355E448E9109BFF9 /* simple_game_loop */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CC36B8FB65F744BCA36A3A9B /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		DF5A643C89C241AB92C89635 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				54D1221D57B044F1B9066078 /* Color.cpp */,
+				39D886D9CDE44A33A8A7FD51 /* Data.cpp */,
+				CCD9DAB353BA4A4DB3578B5F /* main.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		EFFEAA6A887F481BB0A5AC5A /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4F9B2D15401C42E686B6BB15 /* simple_game_loop */,
+				758AE34351034E68B71303BA /* ALL_BUILD */,
+				C0590DEBA7464294874798CB /* ZERO_CHECK */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		048457D621AA4378B1D183AC /* simple_game_loop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D51F48EF148B437FAB4268CD /* Build configuration list for PBXNativeTarget "simple_game_loop" */;
+			buildPhases = (
+				2C1579068BAD42E29A21B978 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				62123224FEA94D1AA485EE66 /* PBXTargetDependency */,
+			);
+			name = simple_game_loop;
+			productName = simple_game_loop;
+			productReference = D1D39539355E448E9109BFF9 /* simple_game_loop */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ED60F8D39E2B4470BE4E5FCA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 5314639AF03E4CBC9FF0D4A6 /* Build configuration list for PBXProject "simple_game_loop" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4B9042042FFA4F43A0F9C013;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				048457D621AA4378B1D183AC /* simple_game_loop */,
+				7CAC57D79F93489DAFAA735F /* ALL_BUILD */,
+				1E82F0D39B7F4014B97D68D5 /* ZERO_CHECK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8BF20C9DCCF34C5E82CDB3EB /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop -f /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		E3992E37B8AC4C0380D77B33 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop -f /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2C1579068BAD42E29A21B978 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EDD49D64E3A14003A4F75EF5 /* Color.cpp in Sources */,
+				E2FA00477BFE4692BEE9BF47 /* Data.cpp in Sources */,
+				D60D3A34A38F421C99857824 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4F3A65E88171443FB4375D99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 048457D621AA4378B1D183AC /* simple_game_loop */;
+			targetProxy = B730F4D33BBC4263946B98B7 /* PBXContainerItemProxy */;
+		};
+		62123224FEA94D1AA485EE66 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E82F0D39B7F4014B97D68D5 /* ZERO_CHECK */;
+			targetProxy = 24F5B19FD769425B9BE3D18E /* PBXContainerItemProxy */;
+		};
+		B3F475E7091749F9A30CAB7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E82F0D39B7F4014B97D68D5 /* ZERO_CHECK */;
+			targetProxy = 084B72E15B0B4F1DA92AA52A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		065E9F02900A4D0D9E7FCEB2 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		11EF484E0F784351BD948ADD /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		165B2C773C6E4979A6F5AD54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
+				);
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-stdlib=libc++",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"-llua",
+					"-lSDL2",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = simple_game_loop;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		2135C5DF25754FF9B7E6B419 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
+				);
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-stdlib=libc++",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"-llua",
+					"-lSDL2",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = simple_game_loop;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		37FBAAE9D7B243649E8F6829 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		3C142A30FDEE4C0BA44754E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		49112D24A2A74BF2AF07EFA4 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		888B89C3023447598444DD69 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
+				);
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-stdlib=libc++",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"-llua",
+					"-lSDL2",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = simple_game_loop;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		923627EB37304DFF9E7C6A98 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		9D133A693A994EB78CE8C200 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/build;
+			};
+			name = Release;
+		};
+		AD21C64AF50F4B47AAF56AE1 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/build;
+			};
+			name = RelWithDebInfo;
+		};
+		AF744B4A983240BD878FD48F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		AFA48B309FE74514BB9C3B19 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/lib",
+				);
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-stdlib=libc++",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"-llua",
+					"-lSDL2",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = simple_game_loop;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		BA31BF49E27243809CCC9ACA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/build;
+			};
+			name = Debug;
+		};
+		BD9D942193664A778016C236 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/lua-5.2.3/include",
+					"/Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/libs/SDL2-2.0.3/include",
+					/usr/local/include/SDL2,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		CCB67E0F2B3F474D851A0DF4 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/sea_mountain/work/github/hello_low_layer/lua/samples/clion/simple_game_loop/build;
+			};
+			name = MinSizeRel;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		210D28D259C54A85AE06C32E /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD9D942193664A778016C236 /* Debug */,
+				3C142A30FDEE4C0BA44754E9 /* Release */,
+				11EF484E0F784351BD948ADD /* MinSizeRel */,
+				923627EB37304DFF9E7C6A98 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5314639AF03E4CBC9FF0D4A6 /* Build configuration list for PBXProject "simple_game_loop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA31BF49E27243809CCC9ACA /* Debug */,
+				9D133A693A994EB78CE8C200 /* Release */,
+				CCB67E0F2B3F474D851A0DF4 /* MinSizeRel */,
+				AD21C64AF50F4B47AAF56AE1 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D51F48EF148B437FAB4268CD /* Build configuration list for PBXNativeTarget "simple_game_loop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				165B2C773C6E4979A6F5AD54 /* Debug */,
+				2135C5DF25754FF9B7E6B419 /* Release */,
+				888B89C3023447598444DD69 /* MinSizeRel */,
+				AFA48B309FE74514BB9C3B19 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E62AC4E513F0495A85EE8E22 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37FBAAE9D7B243649E8F6829 /* Debug */,
+				AF744B4A983240BD878FD48F /* Release */,
+				49112D24A2A74BF2AF07EFA4 /* MinSizeRel */,
+				065E9F02900A4D0D9E7FCEB2 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ED60F8D39E2B4470BE4E5FCA /* Project object */;
+}
