@@ -271,7 +271,7 @@ void Draw() {
 
     int boss_color_id = -1;
     map<int, vector<SDL_Rect *>> data_list;
-    SDL_Rect *boss_rect;
+    SDL_Rect *boss_rect = NULL;
     if (data_num != 0) {
         lua_getglobal(l, "data_list");
         lua_pushnil(l);
@@ -304,7 +304,9 @@ void Draw() {
     }
     lua_settop(l, 0);
 
-    draw_boss_texture(is_smile, boss_rect);
+    if (boss_rect != NULL) {
+        draw_boss_texture(is_smile, boss_rect);
+    }
 
     if (data_list.size() != 0) {
         for (int i = 0; i < palettes.size(); i++) {
