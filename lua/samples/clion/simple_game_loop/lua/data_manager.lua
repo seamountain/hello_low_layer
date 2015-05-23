@@ -1,11 +1,14 @@
 data_list = {}
+boss_data = nil
 
 function register_data(x, y, color_id)
   local size = math.random(5, 20)
   local w = size
   local h = size
   local dir = math.random(0, 3)
-  local d = Data.new(x, y, color_id, w, h, dir)
+  -- TODO add color_id switch for character relatived attack range
+  local ar = 50
+  local d = Data.new(x, y, color_id, w, h, dir, ar)
   table.insert(data_list, d)
 
   add_to_tree(d)
@@ -16,7 +19,8 @@ function register_boss_data()
   local y = screen_height / 2
   local w = 100
   local h = 100
-  local b = Boss.new(x, y, w, h)
+  local ar = 0
+  local b = Boss.new(x, y, w, h, ar)
   b.d = math.random(0, 3)
 
   table.insert(data_list, b)
@@ -24,8 +28,8 @@ function register_boss_data()
   add_to_tree(b)
 end
 
-function register_data_with_params(x, y, color_id, w, h, dir)
-  local d = Data.new(x, y, color_id, w, h, dir)
+function register_data_with_params(x, y, color_id, w, h, dir, attack_range)
+  local d = Data.new(x, y, color_id, w, h, dir, attack_range)
   table.insert(data_list, d)
 
   add_to_tree(d)
@@ -110,7 +114,7 @@ function split_data(index)
   end
 
   local slide_rate = math.random(890, 950) / 1000
-  register_data_with_params(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d)
+  register_data_with_params(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d, d.attack_range)
   return 0
 end
 

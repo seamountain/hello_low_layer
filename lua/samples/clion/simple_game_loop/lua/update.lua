@@ -31,12 +31,6 @@ function move(index, list_size)
     return 0
   end
 
-  local is_attacked = check_wall_collision(d)
-
-  if is_attacked then
-    turn_opposite_direction(d)
-  end
-
   d:move_position()
 
   if is_attacked and d.is_split then
@@ -56,6 +50,26 @@ function check_wall_collision(d)
     is_attacked = false
   end
   return is_attacked
+end
+
+function check_boss_distance(d)
+  -- TODO Add test
+  local is_near_boss = false
+
+  if (boss_data.y < d.y and d.y < (boss_data.y + boss_data.h)) then
+    if (boss_data.x - d.attack_range) < (d.x + d.w) and d.x < (boss_data.x + boss_data.w) then
+      is_near_boss = true
+    elseif d.x < (boss_data.x + boss_data.w + d.attack_range) and (boss_data.x - d.attack_range) < d.x then
+      is_near_boss = true
+    end
+  elseif ((boss_data.x < d.x and d.x < (boss_data.x + boss_data.w))) then
+    if (boss_data.y - d.attack_range) < (d.y + d.h) and d.y < (boss_data.y + boss_data.h) then
+      is_near_boss = true
+    elseif d.y < (boss_data.y + boss_data.h + d.attack_range) and (boss_data.y - d.attack_range) < d.y then
+      is_near_boss = true
+    end
+  end
+  return is_near_boss
 end
 
 function turn_opposite_direction(d)

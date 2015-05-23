@@ -1,5 +1,5 @@
 Data = {}
-Data.new = function (x, y, color_id, w, h, d)
+Data.new = function (x, y, color_id, w, h, d, ar)
   local obj = {}
   obj.x = x
   obj.y = y
@@ -7,6 +7,7 @@ Data.new = function (x, y, color_id, w, h, d)
   obj.w = w
   obj.h = h
   obj.d = d
+  obj.attack_range = ar
   obj.data_leaf = {}
   obj.is_move = true
   obj.is_split = true
@@ -14,6 +15,13 @@ Data.new = function (x, y, color_id, w, h, d)
   obj.on_boss_collision_enter = false
 
   obj.move_position = function (self)
+    local is_attacked = check_wall_collision(self)
+    local is_near_boss = check_boss_distance(self)
+
+    if is_attacked or is_near_boss then
+      turn_opposite_direction(self)
+    end
+
     local speed = (self.w * self.h) / 10
     if self.d == left then
       self.x = self.x - speed

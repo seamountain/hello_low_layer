@@ -1,5 +1,5 @@
 Boss = {}
-Boss.new = function (x, y, w, h)
+Boss.new = function (x, y, w, h, ar)
   local obj = {}
   obj.x = x
   obj.y = y
@@ -7,6 +7,7 @@ Boss.new = function (x, y, w, h)
   obj.w = w
   obj.h = h
   obj.d = -1
+  obj.attack_range = ar
   obj.data_leaf = {}
   obj.is_boss = true -- Replace this frag with checking class
   obj.is_move = true
@@ -15,6 +16,11 @@ Boss.new = function (x, y, w, h)
   obj.keep_same_direction_count = 50
 
   obj.move_position = function (self)
+    local is_attacked = check_wall_collision(self)
+    if is_attacked then
+      turn_opposite_direction(self)
+    end
+
     local speed = (self.w * self.h) / 1000 / 2
     if self.d == left then
       self.x = self.x - speed
@@ -32,6 +38,8 @@ Boss.new = function (x, y, w, h)
     else
       self.move_frame_count = self.move_frame_count + 1
     end
+
+    boss_data = self
   end
 
   obj.onCollisionEnter = function (self)
