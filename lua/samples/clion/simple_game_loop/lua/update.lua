@@ -42,34 +42,57 @@ end
 
 function check_wall_collision(d)
   local is_attacked = true
+  local wall_pos_dir = -1
   if screen_width - d.w < d.x then
+    wall_pos_dir = right
   elseif d.x <= 0 then
+    wall_pos_dir = left
   elseif screen_height - d.h < d.y then
+    wall_pos_dir = buttom
   elseif d.y <= 0 then
+    wall_pos_dir = top
   else
     is_attacked = false
   end
-  return is_attacked
+  return is_attacked, wall_pos_dir
+end
+
+function reset_potision_inside_wall(d, wall_pos_dir)
+  -- TODO Fix reset pos bug at wall left
+  if left then
+    d.x = 0
+  elseif top then
+    d.y = 0
+  elseif right then
+    d.x = screen_width - d.w
+  elseif buttom then
+    d.y = screen_height - d.h
+  end
 end
 
 function check_boss_distance(d)
   -- TODO Add test
   local is_near_boss = false
+  local boss_pos_dir = -1
 
   if (boss_data.y < d.y and d.y < (boss_data.y + boss_data.h)) then
     if (boss_data.x - d.attack_range) < (d.x + d.w) and d.x < (boss_data.x + boss_data.w) then
       is_near_boss = true
+      boss_pos_dir = right
     elseif d.x < (boss_data.x + boss_data.w + d.attack_range) and (boss_data.x - d.attack_range) < d.x then
       is_near_boss = true
+      boss_pos_dir = left
     end
   elseif ((boss_data.x < d.x and d.x < (boss_data.x + boss_data.w))) then
     if (boss_data.y - d.attack_range) < (d.y + d.h) and d.y < (boss_data.y + boss_data.h) then
       is_near_boss = true
+      boss_pos_dir = down
     elseif d.y < (boss_data.y + boss_data.h + d.attack_range) and (boss_data.y - d.attack_range) < d.y then
       is_near_boss = true
+      boss_pos_dir = top
     end
   end
-  return is_near_boss
+  return is_near_boss, boss_pos_dir
 end
 
 function turn_opposite_direction(d)

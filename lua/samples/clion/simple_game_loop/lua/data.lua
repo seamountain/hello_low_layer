@@ -15,22 +15,30 @@ Data.new = function (x, y, color_id, w, h, d, ar)
   obj.on_boss_collision_enter = false
 
   obj.move_position = function (self)
-    local is_attacked = check_wall_collision(self)
-    local is_near_boss = check_boss_distance(self)
+    local is_near_boss, boss_pos_dir = check_boss_distance(self)
 
-    if is_attacked or is_near_boss then
+    if is_near_boss then
+      self.d = boss_pos_dir
       turn_opposite_direction(self)
     end
 
-    local speed = (self.w * self.h) / 10
-    if self.d == left then
-      self.x = self.x - speed
-    elseif self.d == up then
-      self.y = self.y - speed
-    elseif self.d == right then
-      self.x = self.x + speed
-    elseif self.d == down then
-      self.y = self.y + speed
+    if is_near_boss then
+      local speed = (self.w * self.h) / 10
+      if self.d == left then
+        self.x = self.x - speed
+      elseif self.d == up then
+        self.y = self.y - speed
+      elseif self.d == right then
+        self.x = self.x + speed
+      elseif self.d == down then
+        self.y = self.y + speed
+      end
+    end
+
+    local is_attacked, wall_pos_dir = check_wall_collision(self)
+    if is_attacked then
+      turn_opposite_direction(self)
+      reset_potision_inside_wall(self, wall_pos_dir)
     end
   end
 
