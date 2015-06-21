@@ -46,6 +46,10 @@ function hit_another_data(index)
 
   local list_size = #d.data_leaf.p_node
   for i = 1, list_size do
+    if d == nil then
+      return
+    end
+
     local target = d.data_leaf.p_node[i].data
     if target ~= d then
       local x1 = d.x
@@ -77,7 +81,7 @@ function hit_another_data(index)
         --end
       else
         if d.on_boss_collision_enter then
-          d:onCollisionExit(target)
+          d:onCollisionExit(target, index)
         end
       end
     end
@@ -90,15 +94,17 @@ function move_data()
   local list_size = #data_list
   local i = 1
   while i <= list_size do
-    local removed_data_num = move(i, list_size)
+    move(i, list_size)
 
-    -- The situation data wasn't deleted(data_list size wasn't changed)
-    if removed_data_num <= 0 then
+    if  #data_list < list_size then
+      removed_data_num = list_size - #data_list
+      i = i - removed_data_num
+      list_size = #data_list
+    else -- The situation data wasn't deleted(data_list size wasn't changed)
       hit_another_data(i)
       update_node(i)
       i = i + 1
     end
-    list_size = list_size - removed_data_num
   end
 end
 
@@ -110,12 +116,11 @@ function split_data(index)
 
   local is_removed = remove_data(index)
   if is_removed then
-    return 1
+    return
   end
 
   local slide_rate = math.random(890, 950) / 1000
   register_data_with_params(d.x * slide_rate, d.y * slide_rate, d.color_id, d.w, d.h, d.d, d.attack_range)
-  return 0
 end
 
 function remove_data(index)
@@ -128,4 +133,11 @@ function remove_data(index)
     return true
   end
   return false
+end
+
+function remove_data_immediately(index)
+  local d = data_list[index]
+  remove_leaf(d)
+  d.data_leaf = nil
+  table.remove(data_list, index)
 end

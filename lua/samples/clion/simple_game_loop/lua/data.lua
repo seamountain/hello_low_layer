@@ -52,10 +52,11 @@ Data.new = function (x, y, color_id, w, h, d, ar)
     --reset_potision(self, target)
   end
 
-  obj.onCollisionExit = function (self, target)
+  obj.onCollisionExit = function (self, target, index)
     if target.is_boss then
       target:onCollisionExit()
       self.on_boss_collision_enter = false
+      remove_data_immediately(index)
     end
   end
 

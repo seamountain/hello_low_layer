@@ -23,21 +23,19 @@ function move(index, list_size)
   local d = data_list[index]
 
   if d.is_move == false then
-    return 0
+    return
   end
 
   -- TODO Fix storing invalid data at data_list[index]
   if data_list[index] == nil then
-    return 0
+    return
   end
 
   d:move_position()
 
   if is_attacked and d.is_split then
-    return split_data(index)
+    split_data(index)
   end
-
-  return 0
 end
 
 function check_wall_collision(d)
