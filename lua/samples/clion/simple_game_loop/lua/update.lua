@@ -58,14 +58,13 @@ function check_wall_collision(d)
 end
 
 function reset_potision_inside_wall(d, wall_pos_dir)
-  -- TODO Fix reset pos bug at wall left
-  if left then
+  if wall_pos_dir == left then
     d.x = 0
-  elseif top then
+  elseif wall_pos_dir == top then
     d.y = 0
-  elseif right then
+  elseif wall_pos_dir == right then
     d.x = screen_width - d.w
-  elseif buttom then
+  elseif wall_pos_dir == buttom then
     d.y = screen_height - d.h
   end
 end
